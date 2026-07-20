@@ -4,45 +4,45 @@ import Link from 'next/link'
 
 const projects = [
   {
-    name: "Valora",
-    category: "Wallet",
-    description: "Mobile-first wallet for sending, saving, and spending Celo assets.",
-    icon: Smartphone,
+    name: "AnyTask",
+    category: "Freelance",
+    description: "Zero-fee global freelance platform powered by ETN.",
+    icon: Globe,
     color: "bg-primary/20 text-primary"
   },
   {
-    name: "Mento",
-    category: "Stability",
-    description: "The protocol behind Celo's algorithmic stablecoins like cUSD.",
+    name: "ETN App",
+    category: "Wallet",
+    description: "Mobile wallet for sending, receiving, and spending ETN.",
+    icon: Smartphone,
+    color: "bg-secondary/20 text-secondary"
+  },
+  {
+    name: "Mobile Top-ups",
+    category: "Utility",
+    description: "Purchase mobile airtime and data across 160+ countries.",
+    icon: Zap,
+    color: "bg-primary/20 text-primary"
+  },
+  {
+    name: "Everyday Utility",
+    category: "Payments",
+    description: "Pay for electricity and essential utilities with ETN.",
     icon: Shield,
     color: "bg-secondary/20 text-secondary"
   },
   {
-    name: "EthicHub",
-    category: "ReFi",
-    description: "Crowdlending platform for unbanked small farmers.",
+    name: "Enterprise Validators",
+    category: "Network",
+    description: "Universities and NGOs securing the IBFT Smart Chain.",
     icon: Heart,
     color: "bg-primary/20 text-primary"
   },
   {
-    name: "UbeSwap",
-    category: "DeFi",
-    description: "Mobile-first decentralized exchange on Celo.",
-    icon: Zap,
-    color: "bg-secondary/20 text-secondary"
-  },
-  {
-    name: "GoodDollar",
-    category: "Impact",
-    description: "Universal Basic Income protocol on Celo.",
+    name: "Smart Chain dApps",
+    category: "Web3",
+    description: "EVM compatible decentralized applications.",
     icon: Coins,
-    color: "bg-primary/20 text-primary"
-  },
-  {
-    name: "ImpactMarket",
-    category: "Social",
-    description: "Human empowerment protocol on Celo.",
-    icon: Globe,
     color: "bg-secondary/20 text-secondary"
   }
 ]
@@ -53,10 +53,10 @@ export default function EcosystemPage() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="font-[family-name:var(--font-cinzel-decorative)] text-4xl md:text-6xl font-bold text-primary mb-6">
-            The Celo Ecosystem
+            The Electroneum Ecosystem
           </h1>
           <p className="font-[family-name:var(--font-cinzel)] text-xl text-white/60 max-w-2xl mx-auto">
-            Discover the builders and protocols creating a world of prosperity for all on the Celo network.
+            Discover the builders and protocols creating a world of prosperity for all on the Electroneum network.
           </p>
         </div>
 

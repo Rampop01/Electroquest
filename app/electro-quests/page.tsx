@@ -34,7 +34,7 @@ export default function ElectroquestsPage() {
   const { playSound } = useSound()
 
   useEffect(() => {
-    const savedProgress = localStorage.getItem("celoQuestProgress")
+    const savedProgress = localStorage.getItem("electroQuestProgress")
     if (savedProgress) {
       setProgress(JSON.parse(savedProgress))
     } else {
@@ -42,7 +42,7 @@ export default function ElectroquestsPage() {
       for (let i = 1; i <= 10; i++) {
         initialProgress[i] = i === 1 ? "unlocked" : "locked"
       }
-      localStorage.setItem("celoQuestProgress", JSON.stringify(initialProgress))
+      localStorage.setItem("electroQuestProgress", JSON.stringify(initialProgress))
       setProgress(initialProgress)
     }
     setIsLoading(false)
@@ -64,62 +64,62 @@ export default function ElectroquestsPage() {
   const quests = [
     { 
       id: "1", 
-      title: "Celo Network Foundations", 
-      description: "Discover the foundations of Celo's mobile-first mission",
+      title: "Electroneum Foundations", 
+      description: "Discover the foundations of Electroneum's mission for financial inclusion",
       icon: Globe
     },
     { 
       id: "2", 
-      title: "Stablecoins & Mento", 
-      description: "Learn about cUSD, cEUR, and the Mento Protocol",
-      icon: Zap
-    },
-    { 
-      id: "3", 
-      title: "$CELO Token & Governance", 
-      description: "Understand Celo's native asset and decentralized DAO",
+      title: "The ETN Token", 
+      description: "Explore the utility of the ETN token in everyday transactions",
       icon: Coins
     },
     { 
-      id: "4", 
-      title: "Mobile-First Accessibility", 
-      description: "Social Connect and phone number identifiers",
+      id: "3", 
+      title: "The AnyTask Platform", 
+      description: "Learn how the zero-fee freelance platform empowers digital workers",
       icon: Code
     },
     { 
-      id: "5", 
-      title: "Celo Ecosystem", 
-      description: "Explore Valora, Opera MiniPay, and more",
-      icon: Globe2
+      id: "4", 
+      title: "The IBFT Smart Chain", 
+      description: "Discover how the fast, energy-efficient consensus mechanism secures the network",
+      icon: Zap
     },
     { 
-      id: "6", 
-      title: "Ethereum L2 Transition", 
-      description: "The future of Celo as an Ethereum Layer 2",
+      id: "5", 
+      title: "EVM Compatibility", 
+      description: "Explore how developers easily deploy Ethereum dApps on Electroneum",
       icon: HardDrive
     },
     { 
-      id: "7", 
-      title: "Celo Reserve & Stability", 
-      description: "How Celo maintains currency stability",
+      id: "6", 
+      title: "Enterprise Validators", 
+      description: "Learn about the trusted NGOs and universities securing the network",
       icon: Shield
     },
     { 
+      id: "7", 
+      title: "Micro-transactions", 
+      description: "Discover how near-zero fees enable everyday commerce globally",
+      icon: Coins
+    },
+    { 
       id: "8", 
-      title: "Regenerative Finance (ReFi)", 
-      description: "Sustainability and impact on Celo",
-      icon: GitBranch
+      title: "Real-World Utility", 
+      description: "Explore mobile airtime, utility payments, and more with ETN",
+      icon: Globe2
     },
     { 
       id: "9", 
-      title: "Developer Experience", 
-      description: "Building on Celo with familiar tools",
-      icon: Map
+      title: "Sustainability", 
+      description: "Learn about Electroneum's green and eco-friendly blockchain",
+      icon: GitBranch
     },
     { 
       id: "10", 
-      title: "Global Inclusion", 
-      description: "Celo's impact on emerging markets",
+      title: "Global Ecosystem", 
+      description: "See how the ecosystem spans across emerging markets and beyond",
       icon: Link2
     },
   ]
@@ -133,7 +133,7 @@ export default function ElectroquestsPage() {
       <div className="min-h-screen bg-linear-to-b from-gray-900 to-black flex items-center justify-center">
         <div className="animate-pulse text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-blue-400">Loading your Celo journey...</p>
+          <p className="text-blue-400">Loading your Electroneum journey...</p>
         </div>
       </div>
     )
@@ -165,10 +165,10 @@ export default function ElectroquestsPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="font-(family-name:--font-cinzel-decorative) text-4xl md:text-6xl font-bold text-primary mb-4 text-glow-md">
-           Celo Quest Map
+           Electroneum Quest Map
           </h1>
           <p className="font-(family-name:--font-cinzel) text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Journey through the ancient knowledge of Celo Network
+            Journey through the ancient knowledge of Electroneum Network
           </p>
         </div>
 
