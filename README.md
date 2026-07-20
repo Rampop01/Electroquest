@@ -18,7 +18,7 @@ The player is presented with two learning tracks to specialise in:
 
 | Path | Description |
 |------|-------------|
-| **Electro Quests** | Learn about the Electroneum blockchain — its mission, DeFi ecosystem, stablecoins, and consensus mechanism |
+| **Electro Quests** | Learn about the Electroneum blockchain — its mission, DeFi ecosystem, AnyTask, and the IBFT consensus mechanism |
 | **Ethereum Quests** | Learn about Ethereum fundamentals — the EVM, smart contracts, gas, and Layer 2 scaling |
 
 They pick one and are taken to the quest map for that path.
@@ -36,11 +36,11 @@ The player clicks an unlocked quest node to enter it.
 ---
 
 ### Step 4 — Read the Scroll (Quest Introduction Page)
-Before the quiz begins, the player reads a short educational scroll — a rich text page explaining the topic they are about to be tested on. This teaches them the core concept (e.g. "What is CELO staking?" or "How does gas pricing work?").
+Before the quiz begins, the player reads a short educational scroll — a rich text page explaining the topic they are about to be tested on. This teaches them the core concept (e.g. "What is ETN?" or "How does EVM compatibility work?").
 
 ---
 
-### Step 5 — Enter the Quiz Room (`/quest/[type]/[id]/quiz`)
+### Step 5 — Enter the Quiz Room (`/electro-quests/[id]/quiz`)
 The player enters the quiz arena. This consists of:
 - **10 multiple-choice questions** on the topic they just read
 - A **progress bar** at the top showing question X of 10
@@ -62,11 +62,11 @@ If they fail, they click **"Retry Quiz"** and start the 10 questions again from 
 ---
 
 ### Step 7 — Connect Wallet & Claim On-Chain Rewards
-If the player **passes**, the Victory screen appears. To claim their rewards they **must connect their Celo wallet** (MetaMask, Coinbase Wallet, or any injected wallet). The flow is:
+If the player **passes**, the Victory screen appears. To claim their rewards they **must connect their wallet** (MetaMask, Coinbase Wallet, or any injected wallet). The flow is:
 
 1. Player clicks **"Connect Wallet"** — a compact, gaming-style selector appears
 2. They choose their wallet and approve the connection
-3. If they are on the wrong network, they are prompted to **switch to Celo**
+3. If they are on the wrong network, they are prompted to **switch to Electroneum Testnet**
 4. They click **"Claim Rewards & Continue"**
 
 ---
@@ -83,7 +83,7 @@ This prevents anyone from forging their own claims — only scores signed by the
 ---
 
 ### Step 9 — On-Chain Transaction (`GameCore.sol`)
-The frontend takes the signed voucher and calls **`claimProgress()`** on the `GameCore` smart contract deployed on Celo Mainnet. The player signs and pays the small CELO gas fee in their wallet. The contract:
+The frontend takes the signed voucher and calls **`claimProgress()`** on the `GameCore` smart contract deployed on the Electroneum network. The player signs and pays the small ETN gas fee in their wallet. The contract:
 - Verifies the EIP-712 signature against the platform's signer address
 - Checks the nonce has not been used before (replay protection)
 - Mints **XP tokens** to the player's wallet via `XPToken.sol`
@@ -96,7 +96,7 @@ The frontend takes the signed voucher and calls **`claimProgress()`** on the `Ga
 Once the transaction is confirmed on-chain:
 - The current quest is marked **Completed** on the map
 - The **next quest node** is unlocked
-- The player is redirected to the **Victory screen** (`/victory/[id]`) with a celebration animation
+- The player is redirected to the **Victory screen** (`/electro-victory/[id]`) with a celebration animation
 - Their wallet now holds the XP tokens and the Chapter NFT as proof of completion
 
 ---
@@ -111,12 +111,11 @@ The player returns to the quest map and repeats Steps 3–10 for each subsequent
 ## Features
 
 - **Web3 Integration**: Seamless wallet connection with Wagmi and Viem
-- **Smart Contract Interaction**: Interact with Celo smart contracts securely
+- **Smart Contract Interaction**: Interact with Electroneum smart contracts securely
 - **EIP-712 Secure Vouchers**: Advanced off-chain signature generation via API to prevent cheating and secure on-chain minting
-- **Opera MiniPay Ready**: 100% mobile-responsive design, optimized for embedded browser wallets like MiniPay
 - **Responsive UI**: Built with modern React, Tailwind CSS, and a custom RPG aesthetic (Cinzel fonts, glowing elements)
 - **Type Safety**: Full TypeScript support for better developer experience
-- **DeFi Ready**: Integration with Celo and other EVM-compatible chains
+- **DeFi Ready**: Integration with Electroneum and other EVM-compatible chains
 
 ## Tech Stack
 
@@ -125,7 +124,7 @@ The player returns to the quest map and repeats Steps 3–10 for each subsequent
 - **State Management**: React Query for server state management
 - **Blockchain**:
   - Wagmi v3 for wallet connections
-  - Viem for Celo interaction and EIP-712 typing
+  - Viem for Electroneum interaction and EIP-712 typing
   - Smart contracts written in Solidity
 - **Backend/API**: Next.js App Router API for secure voucher signing
 - **Animation**: Framer Motion & pure CSS for smooth animations
@@ -136,14 +135,14 @@ The player returns to the quest map and repeats Steps 3–10 for each subsequent
 - Node.js 18+ and npm/yarn/pnpm
 - Git
 - MetaMask or any Web3 wallet
-- Basic understanding of Celo and smart contracts
+- Basic understanding of Electroneum and smart contracts
 
 ## Quick Start
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/Queenode/Celoquest.git
-   cd Celoquest
+   git clone https://github.com/Rampop01/Electroquest.git
+   cd Electroquest
    ```
 
 2. **Install dependencies**
@@ -168,10 +167,10 @@ The player returns to the quest map and repeats Steps 3–10 for each subsequent
 ## Project Structure
 
 ```
-Celoquest/
+Electroquest/
 ├── app/                # Next.js app directory
 │   ├── api/            # Server-side API routes (EIP-712 signing)
-│   ├── electro-quests/    # Celo quest map and quest pages
+│   ├── electro-quests/ # Electroneum quest map and quest pages
 │   ├── leaderboard/    # Leaderboard page (coming soon)
 │   ├── marketplace/    # NFT marketplace (coming soon)
 │   └── victory/        # Victory celebration screen
@@ -211,20 +210,8 @@ Deploy the Next.js application to Vercel or your preferred hosting provider.
 
 ### Smart Contracts
 
-#### Celo Mainnet (Chain ID: 42220)
+#### Electroneum Network
 
-| Contract | Address |
-| --- | --- |
-| XPToken | `0xd9fc6cc979472a5fa52750ae26805462e1638872` |
-| ChapterNFT | `0x274f499201b0716e6cb632ff5bec10cad508ead6` |
-| Leaderboard | `0x3a89a1611b309cd883a22c99463936fc4a0dee03` |
-| GameCore | `0xaa1deb4cc3c3386d813e7f7b2ff52a7c4efb675e` |
+*Contracts will be deployed soon to the Electroneum network.*
 
-Explorer links:
-
-- **XPToken**: https://celoscan.io/address/0xd9fc6cc979472a5fa52750ae26805462e1638872
-- **ChapterNFT**: https://celoscan.io/address/0x274f499201b0716e6cb632ff5bec10cad508ead6
-- **Leaderboard**: https://celoscan.io/address/0x3a89a1611b309cd883a22c99463936fc4a0dee03
-- **GameCore**: https://celoscan.io/address/0xaa1deb4cc3c3386d813e7f7b2ff52a7c4efb675e
-
-RPC: `https://forno.celo.org`
+RPC: `https://rpc.electroneum.com`
