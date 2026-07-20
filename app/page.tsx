@@ -28,7 +28,7 @@ export default function LandingPage() {
         {/* Logo with glow effect */}
         <div className="mb-14 text-center animate-float">
           <h1 className="font-[family-name:var(--font-cinzel-decorative)] text-6xl md:text-8xl lg:text-9xl font-black text-glow-amber text-glow mb-4 tracking-wider">
-            ETN 
+            ELECTRO
           </h1>
           <h2 className="font-[family-name:var(--font-cinzel-decorative)] text-5xl md:text-7xl lg:text-8xl font-black text-glow-cyan text-glow tracking-widest">
             QUEST
