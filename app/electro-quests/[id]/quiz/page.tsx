@@ -6,7 +6,7 @@ interface CeloQuizPageProps {
   params: Promise<{ id: string }>
 }
 
-export default async function CeloQuizPage({ params }: CeloQuizPageProps) {
+export default async function ElectroQuizPage({ params }: CeloQuizPageProps) {
   const { id } = await params
   const quiz = electroQuizData[id]
 
@@ -14,7 +14,16 @@ export default async function CeloQuizPage({ params }: CeloQuizPageProps) {
     notFound()
   }
 
-  return <QuizRoom questions={quiz} questId={id} questType="celo" />
+  const formattedQuestions = quiz.questions.map((q) => {
+    const correctAnswerIndex = q.answers.findIndex((a) => a.isCorrect);
+    return {
+      question: q.question,
+      options: q.answers.map((a) => a.text),
+      correctAnswer: correctAnswerIndex,
+    };
+  });
+
+  return <QuizRoom questions={formattedQuestions} questId={id} questType="electroneum" />
 }
 
 export async function generateStaticParams() {
