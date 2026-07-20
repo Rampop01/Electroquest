@@ -1,5 +1,5 @@
 import { QuizRoom } from "@/components/quiz-room"
-import { electroQuizData } from "@/lib/electro-quest-data"
+import { electroQuizData } from "@/lib/quiz-data"
 import { notFound } from "next/navigation"
 
 interface CeloQuizPageProps {
