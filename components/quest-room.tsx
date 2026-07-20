@@ -97,6 +97,9 @@ export default function QuestRoom({ questId, questType }: QuestRoomProps) {
     state.guards = [];
     state.spikes = [];
     
+    // Keep track of the animation frame for cleanup
+    let animationId: number;
+
     // Scene setup
     state.scene = new THREE.Scene();
     state.scene.background = new THREE.Color(0x0a0a15);
@@ -554,7 +557,7 @@ export default function QuestRoom({ questId, questType }: QuestRoomProps) {
 
     // Animation loop
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationId = requestAnimationFrame(animate);
 
       // Stop game loop if game over OR all letters found (victory)
       if (gameOver || foundLetters.length === questData.letters.length) {
@@ -760,7 +763,9 @@ export default function QuestRoom({ questId, questType }: QuestRoomProps) {
         }
       });
 
-      state.renderer!.render(state.scene!, state.camera!);
+      if (state.renderer && state.scene && state.camera) {
+        state.renderer.render(state.scene, state.camera);
+      }
     };
 
     animate();
@@ -778,6 +783,7 @@ export default function QuestRoom({ questId, questType }: QuestRoomProps) {
 
     // Cleanup
     return () => {
+      cancelAnimationFrame(animationId);
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
       window.removeEventListener('resize', handleResize);
