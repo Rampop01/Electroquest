@@ -1,0 +1,28 @@
+{
+  "transactions": [
+    {
+      "rpc": "https://rpc.ankr.com/celo"
+    },
+    {
+      "rpc": "https://rpc.ankr.com/celo"
+    },
+    {
+      "rpc": "https://rpc.ankr.com/celo"
+    },
+    {
+      "rpc": "https://rpc.ankr.com/celo"
+    },
+    {
+      "rpc": "https://rpc.ankr.com/celo"
+    },
+    {
+      "rpc": "https://rpc.ankr.com/celo"
+    },
+    {
+      "rpc": "https://rpc.ankr.com/celo"
+    },
+    {
+      "rpc": "https://rpc.ankr.com/celo"
+    }
+  ]
+}

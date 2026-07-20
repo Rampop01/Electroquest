@@ -1,0 +1,25 @@
+# Foundry configuration for Electroquest smartcontracts
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+script = "script"
+optimizer = true
+optimizer_runs = 200
+via_ir = true
+solc = "0.8.24"
+remappings = [
+    "@openzeppelin/contracts/=../node_modules/@openzeppelin/contracts/",
+    "openzeppelin-contracts/=../node_modules/@openzeppelin/contracts/"
+]
+allow_paths = ["../node_modules"]
+
+
+# Electroneum Networks
+[rpc_endpoints]
+electroneum = "${ELECTRONEUM_RPC_URL}"
+electroneum_testnet = "https://rpc.ankr.com/electroneum_testnet"
+
+[etherscan]
+electroneum = { key = "${ELECTRONEUMSCAN_API_KEY}", url = "https://blockexplorer.electroneum.com/api" }
+electroneum_testnet = { key = "${ELECTRONEUMSCAN_API_KEY}", url = "https://testnet-blockexplorer.electroneum.com/api" }

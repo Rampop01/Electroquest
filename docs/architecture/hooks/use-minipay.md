@@ -1,0 +1,3 @@
+# useMiniPay
+
+window.ethereum logic.

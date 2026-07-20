@@ -1,0 +1,1 @@
+export function useLeaderboard() { return { data: [], loading: false }; }

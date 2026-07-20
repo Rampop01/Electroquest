@@ -1,0 +1,65 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  experimental: {
+    esmExternals: true,
+  },
+  webpack: (config, { dev, isServer }) => {
+    const webpack = require('webpack');
+
+    // Completely ignore problematic packages and their dependencies
+    config.plugins.push(
+      // Ignore the entire thread-stream package and all its contents
+      new webpack.IgnorePlugin({
+        resourceRegExp: /thread-stream/,
+      }),
+      // Ignore pino logging entirely on client side
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^pino$/,
+      }),
+      new webpack.IgnorePlugin({
+        resourceRegExp: /pino/,
+        contextRegExp: /node_modules/,
+      }),
+      // Ignore all test-related packages
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^(tap|fastbench|desm|pino-elasticsearch|why-is-node-running)$/,
+      }),
+      // Ignore Node.js specific modules
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^(worker_threads|child_process|fs\/promises)$/,
+      })
+    );
+
+    // Replace problematic imports with empty modules for client builds
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'thread-stream': false,
+        'pino': false,
+        '@walletconnect/logger': false,
+      };
+    }
+
+    // Set comprehensive fallbacks
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+      crypto: false,
+      stream: false,
+      http: false,
+      https: false,
+      zlib: false,
+      os: false,
+      worker_threads: false,
+      child_process: false,
+      'pino': false,
+      'thread-stream': false,
+    };
+
+    return config;
+  },
+};
+
+export default nextConfig;

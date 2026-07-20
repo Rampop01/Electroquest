@@ -1,0 +1,2 @@
+// @ts-check
+export function NFTDetailModal() { return <div className="fixed inset-0 bg-stone-dark/80 backdrop-blur-sm"><div className="bg-stone-900 border-cyan-500/30 text-glow-cyan p-4">NFT Details</div></div>; }

@@ -1,0 +1,3 @@
+# MiniPayBadge
+
+Environment detection.

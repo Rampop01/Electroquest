@@ -1,0 +1,6 @@
+import { useState, useEffect } from 'react';
+
+export function useAccounts() {
+  const [data, setData] = useState<any>(null);
+  return { data, isLoading: !data };
+}

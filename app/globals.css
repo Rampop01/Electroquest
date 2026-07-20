@@ -1,0 +1,349 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: oklch(0.12 0.02 280);
+  --foreground: oklch(0.95 0.01 85);
+  --card: oklch(0.15 0.03 275);
+  --card-foreground: oklch(0.95 0.01 85);
+  --popover: oklch(0.15 0.03 275);
+  --popover-foreground: oklch(0.95 0.01 85);
+  --primary: oklch(0.75 0.22 75);
+  --primary-foreground: oklch(0.12 0.02 75);
+  --secondary: oklch(0.7 0.18 195);
+  --secondary-foreground: oklch(0.12 0.02 75);
+  --muted: oklch(0.22 0.03 75);
+  --muted-foreground: oklch(0.6 0.05 75);
+  --accent: oklch(0.6 0.25 300);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.55 0.25 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.3 0.05 75);
+  --input: oklch(0.25 0.05 75);
+  --ring: oklch(0.75 0.22 75);
+  --chart-1: oklch(0.65 0.25 45);
+  --chart-2: oklch(0.55 0.22 145);
+  --chart-3: oklch(0.6 0.18 260);
+  --chart-4: oklch(0.7 0.2 85);
+  --chart-5: oklch(0.5 0.22 320);
+  --radius: 0.5rem;
+  --sidebar: oklch(0.15 0.03 275);
+  --sidebar-foreground: oklch(0.95 0.01 85);
+  --sidebar-primary: oklch(0.65 0.25 45);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.25 0.05 280);
+  --sidebar-accent-foreground: oklch(0.95 0.01 85);
+  --sidebar-border: oklch(0.3 0.05 280);
+  --sidebar-ring: oklch(0.65 0.25 45);
+  --stone: oklch(0.18 0.02 75);
+  --stone-dark: oklch(0.12 0.02 75);
+  --glow-amber: oklch(0.75 0.22 75);
+  --glow-cyan: oklch(0.7 0.18 195);
+  --glow-purple: oklch(0.6 0.25 300);
+  --fog: oklch(0.3 0.05 240 / 0.3);
+}
+
+.dark {
+  --background: oklch(0.08 0.02 280);
+  --foreground: oklch(0.95 0.01 85);
+  --card: oklch(0.12 0.03 275);
+  --card-foreground: oklch(0.95 0.01 85);
+  --popover: oklch(0.12 0.03 275);
+  --popover-foreground: oklch(0.95 0.01 85);
+  --primary: oklch(0.75 0.22 75);
+  --primary-foreground: oklch(0.12 0.02 75);
+  --secondary: oklch(0.7 0.18 195);
+  --secondary-foreground: oklch(0.12 0.02 75);
+  --muted: oklch(0.18 0.03 75);
+  --muted-foreground: oklch(0.55 0.05 75);
+  --accent: oklch(0.6 0.25 300);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.5 0.25 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.25 0.05 75);
+  --input: oklch(0.2 0.05 75);
+  --ring: oklch(0.75 0.22 75);
+  --chart-1: oklch(0.65 0.25 45);
+  --chart-2: oklch(0.55 0.22 145);
+  --chart-3: oklch(0.6 0.18 260);
+  --chart-4: oklch(0.7 0.2 85);
+  --chart-5: oklch(0.5 0.22 320);
+  --sidebar: oklch(0.12 0.03 275);
+  --sidebar-foreground: oklch(0.95 0.01 85);
+  --sidebar-primary: oklch(0.7 0.28 45);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.2 0.05 280);
+  --sidebar-accent-foreground: oklch(0.95 0.01 85);
+  --sidebar-border: oklch(0.25 0.05 280);
+  --sidebar-ring: oklch(0.7 0.28 45);
+}
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback";
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-stone: var(--stone);
+  --color-stone-dark: var(--stone-dark);
+  --color-glow-amber: var(--glow-amber);
+  --color-glow-cyan: var(--glow-cyan);
+  --color-glow-purple: var(--glow-purple);
+  --color-fog: var(--fog);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Reduced shadow effects throughout, kept only essential glow for gaming atmosphere */
+@layer utilities {
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      filter: drop-shadow(0 0 6px currentColor);
+    }
+    50% {
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  @keyframes scroll-unfurl {
+    from {
+      transform: scaleY(0.1) rotateX(45deg);
+      opacity: 0;
+    }
+    to {
+      transform: scaleY(1) rotateX(0deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes door-open {
+    from {
+      transform: perspective(1000px) rotateY(0deg);
+    }
+    to {
+      transform: perspective(1000px) rotateY(-90deg);
+    }
+  }
+
+  .animate-glow-pulse {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s linear infinite;
+  }
+
+  .animate-flicker {
+    animation: flicker 3s ease-in-out infinite;
+  }
+
+  .animate-scroll-unfurl {
+    animation: scroll-unfurl 1s ease-out forwards;
+  }
+
+  .animate-door-open {
+    animation: door-open 1.5s ease-out forwards;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 8px currentColor;
+  }
+
+  .text-glow-sm {
+    text-shadow: 0 0 4px currentColor;
+  }
+
+  .text-glow-md {
+    text-shadow: 0 0 12px currentColor, 0 0 24px currentColor;
+  }
+
+  .shadow-glow-primary {
+    box-shadow: 0 0 20px rgba(53, 208, 127, 0.3), 0 0 40px rgba(53, 208, 127, 0.1);
+  }
+
+  .shadow-glow-secondary {
+    box-shadow: 0 0 20px rgba(251, 204, 92, 0.3), 0 0 40px rgba(251, 204, 92, 0.1);
+  }
+
+  @keyframes float-slow {
+    0%, 100% {
+      transform: translateY(0px);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translateY(-20px);
+      opacity: 1;
+    }
+  }
+
+  .animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .holographic {
+    background-image: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(53, 208, 127, 0.08) 25%,
+      rgba(251, 204, 92, 0.08) 50%,
+      rgba(69, 208, 213, 0.08) 75%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    background-size: 400% 400%;
+    animation: holo-shine 10s ease infinite;
+  }
+
+  @keyframes holo-shine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes pulse-amber {
+    0%, 100% { background-color: rgba(139, 115, 85, 0.1); }
+    50% { background-color: rgba(139, 115, 85, 0.3); }
+  }
+
+  .reading-highlight {
+    animation: pulse-amber 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    border-radius: 4px;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 50%, 90% { transform: translateX(-4px); }
+    30%, 70% { transform: translateX(4px); }
+  }
+  .animate-shake { animation: shake 0.4s ease-in-out; }
+
+  @keyframes flash-correct {
+    0%, 100% { background-color: rgba(6, 182, 212, 0.2); }
+    50% { background-color: rgba(6, 182, 212, 0.6); box-shadow: 0 0 20px rgba(6, 182, 212, 0.6); }
+  }
+  @keyframes flash-wrong {
+    0%, 100% { background-color: rgba(127, 29, 29, 0.2); }
+    50% { background-color: rgba(127, 29, 29, 0.6); box-shadow: 0 0 20px rgba(248, 113, 113, 0.6); }
+  }
+  .animate-flash-correct { animation: flash-correct 0.3s ease-out; }
+  .animate-flash-wrong { animation: flash-wrong 0.3s ease-out; }
+
+  @keyframes particle-0 {
+    0% { transform: rotate(var(--angle)) translateX(0) scale(1); opacity: 1; }
+    100% { transform: rotate(var(--angle)) translateX(40px) scale(0); opacity: 0; }
+  }
+  @keyframes particle-1 {
+    0% { transform: rotate(var(--angle)) translateX(0) scale(1); opacity: 1; }
+    100% { transform: rotate(var(--angle)) translateX(60px) scale(0); opacity: 0; }
+  }
+  @keyframes particle-2 {
+    0% { transform: rotate(var(--angle)) translateX(0) scale(1); opacity: 1; }
+    100% { transform: rotate(var(--angle)) translateX(80px) scale(0); opacity: 0; }
+  }
+  @keyframes particle-3 {
+    0% { transform: rotate(var(--angle)) translateX(0) scale(1); opacity: 1; }
+    100% { transform: rotate(var(--angle)) translateX(100px) scale(0); opacity: 0; }
+  }
+
+  @keyframes float-up {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-40px); opacity: 0; }
+  }
+  .animate-float-up { animation: float-up 1s ease-out forwards; }
+
+  @keyframes page-fade-in {
+    from { opacity: 0; filter: blur(4px); }
+    to { opacity: 1; filter: blur(0); }
+  }
+  .animate-page-fade-in { animation: page-fade-in 0.6s ease-out forwards; }
+
+  @keyframes rain {
+    0% { transform: translateY(-100%) scale(var(--tw-scale-x, 1)) rotate(var(--tw-rotate, 0)); opacity: 0; }
+    10% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(100vh) scale(var(--tw-scale-x, 1)) rotate(var(--tw-rotate, 0)); opacity: 0; }
+  }
+  .animate-rain { animation: rain linear forwards; }
+}
