@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useRouter, usePathname } from 'next/navigation';
 import { questRooms } from '@/lib/quest-data';
-import { celoQuestRooms } from '@/lib/electro-rooms';
+import { electroQuestRooms } from '@/lib/electro-quest-data';
 
 interface QuestRoomProps {
   questId: string;
@@ -33,7 +33,7 @@ export default function QuestRoom({ questId, questType }: QuestRoomProps) {
     }
     
     if (isCeloRoute) {
-      return celoQuestRooms[questId as keyof typeof celoQuestRooms]; // Celo quest data: MOBILE, ROLLUP, etc.
+      return electroQuestRooms[questId as keyof typeof electroQuestRooms]; // Celo quest data: MOBILE, ROLLUP, etc.
     }
     
     // Backup: Use explicit questType prop (already passed from route pages)
@@ -42,7 +42,7 @@ export default function QuestRoom({ questId, questType }: QuestRoomProps) {
     }
     
     if (questType === 'celo') {
-      return celoQuestRooms[questId as keyof typeof celoQuestRooms];
+      return electroQuestRooms[questId as keyof typeof electroQuestRooms];
     }
     
     // No problematic fallback - if we can't determine the route, return null

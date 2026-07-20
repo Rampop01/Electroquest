@@ -1,4 +1,4 @@
-export const celoQuizData: Record<string, {
+export const electroQuizData: Record<string, {
   questions: Array<{
     id: string;
     question: string;
@@ -14,205 +14,183 @@ export const celoQuizData: Record<string, {
   nextUrl: string;
 }> = {
   "1": {
-    title: "Celo Network Foundations",
-    description: "Test your knowledge about Celo's mobile-first blockchain mission",
+    title: "Electroneum Foundations",
+    description: "Test your knowledge about Electroneum's mission and goals.",
     nextUrl: "/electro-quests/2",
     questions: [
       {
         id: "q1",
-        question: "What is the primary mission of the Celo network?",
+        question: "What is the primary mission of the Electroneum network?",
         answers: [
-          { id: "a1", text: "Gaming and metaverse applications", isCorrect: false },
-          { id: "a2", text: "Creating conditions for prosperity by connecting people globally through mobile-first finance", isCorrect: true },
-          { id: "a3", text: "Enterprise blockchain solutions", isCorrect: false },
-          { id: "a4", text: "Privacy-focused transactions", isCorrect: false }
+          { id: "a1", text: "To create a high-frequency trading platform", isCorrect: false },
+          { id: "a2", text: "To empower the unbanked and provide global financial inclusion", isCorrect: true },
+          { id: "a3", text: "To build enterprise supply chain solutions", isCorrect: false },
+          { id: "a4", text: "To focus exclusively on metaverse gaming", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "What makes Celo unique compared to other blockchains?",
+        question: "What type of transactions is Electroneum specifically designed for?",
         answers: [
-          { id: "a1", text: "It uses Proof of Work consensus", isCorrect: false },
-          { id: "a2", text: "It cannot process smart contracts", isCorrect: false },
-          { id: "a3", text: "It's mobile-first, allowing users to send crypto using phone numbers", isCorrect: true },
-          { id: "a4", text: "It only works on desktop browsers", isCorrect: false }
-        ]
-      },
-      {
-        id: "q3",
-        question: "What is the native token of the Celo network?",
-        answers: [
-          { id: "a1", text: "CELO", isCorrect: true },
-          { id: "a2", text: "cUSD", isCorrect: false },
-          { id: "a3", text: "CEL", isCorrect: false },
-          { id: "a4", text: "CLO", isCorrect: false }
+          { id: "a1", text: "Large institutional transfers", isCorrect: false },
+          { id: "a2", text: "High-speed, low-cost micro-transactions", isCorrect: true },
+          { id: "a3", text: "Slow, highly encrypted cross-border settlements", isCorrect: false },
+          { id: "a4", text: "Only NFT minting", isCorrect: false }
         ]
       }
     ],
     correctAnswers: {
       q1: "a2",
-      q2: "a3",
-      q3: "a1"
+      q2: "a2"
     }
   },
   "2": {
-    title: "Stablecoins & Mento Protocol",
-    description: "Test your knowledge about Celo's stablecoin ecosystem and the Mento exchange",
+    title: "The ETN Token",
+    description: "Test your knowledge about the native ETN token.",
     nextUrl: "/electro-quests/3",
     questions: [
       {
         id: "q1",
-        question: "Which protocol enables decentralized stablecoin minting and exchange on Celo?",
+        question: "What is the native cryptocurrency of the Electroneum network?",
         answers: [
-          { id: "a1", text: "Uniswap", isCorrect: false },
-          { id: "a2", text: "Mento Protocol", isCorrect: true },
-          { id: "a3", text: "Aave", isCorrect: false },
-          { id: "a4", text: "Compound", isCorrect: false }
+          { id: "a1", text: "ETH", isCorrect: false },
+          { id: "a2", text: "ETN", isCorrect: true },
+          { id: "a3", text: "CELO", isCorrect: false },
+          { id: "a4", text: "USDT", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "What is cUSD on the Celo network?",
+        question: "How can ETN be used in the real world?",
         answers: [
-          { id: "a1", text: "A governance token", isCorrect: false },
-          { id: "a2", text: "A wrapped version of USD Coin", isCorrect: false },
-          { id: "a3", text: "Celo's native dollar-pegged stablecoin", isCorrect: true },
-          { id: "a4", text: "A liquidity pool token", isCorrect: false }
-        ]
-      },
-      {
-        id: "q3",
-        question: "Which of these is NOT a Celo stablecoin?",
-        answers: [
-          { id: "a1", text: "cUSD (Celo Dollar)", isCorrect: false },
-          { id: "a2", text: "cEUR (Celo Euro)", isCorrect: false },
-          { id: "a3", text: "cREAL (Celo Real)", isCorrect: false },
-          { id: "a4", text: "cYEN (Celo Yen)", isCorrect: true }
+          { id: "a1", text: "It cannot be used in the real world", isCorrect: false },
+          { id: "a2", text: "Only to pay for smart contract deployments", isCorrect: false },
+          { id: "a3", text: "For mobile airtime top-ups and utility payments in many countries", isCorrect: true },
+          { id: "a4", text: "Only as a governance voting mechanism", isCorrect: false }
         ]
       }
     ],
     correctAnswers: {
       q1: "a2",
-      q2: "a3",
-      q3: "a4"
+      q2: "a3"
     }
   },
   "3": {
-    title: "CELO Token & Governance",
-    description: "Test your knowledge of Celo's governance model and tokenomics",
+    title: "AnyTask Platform",
+    description: "Learn about Electroneum's freelance platform.",
     nextUrl: "/electro-quests/4",
     questions: [
       {
         id: "q1",
-        question: "How does CELO token governance work?",
+        question: "What is AnyTask?",
         answers: [
-          { id: "a1", text: "Only miners can vote", isCorrect: false },
-          { id: "a2", text: "CELO holders can lock tokens to vote on governance proposals", isCorrect: true },
-          { id: "a3", text: "There is no on-chain governance", isCorrect: false },
-          { id: "a4", text: "Only the Celo Foundation can make decisions", isCorrect: false }
+          { id: "a1", text: "A decentralized exchange (DEX)", isCorrect: false },
+          { id: "a2", text: "A global freelance platform where users earn ETN without needing a bank account", isCorrect: true },
+          { id: "a3", text: "A tool for deploying smart contracts", isCorrect: false },
+          { id: "a4", text: "A mobile wallet application", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "What can you earn by locking CELO tokens?",
+        question: "How much seller fees do freelancers pay on AnyTask?",
         answers: [
-          { id: "a1", text: "NFT rewards", isCorrect: false },
-          { id: "a2", text: "Epoch rewards and voting rights", isCorrect: true },
-          { id: "a3", text: "Free stablecoins", isCorrect: false },
-          { id: "a4", text: "Airdrop eligibility only", isCorrect: false }
+          { id: "a1", text: "20%", isCorrect: false },
+          { id: "a2", text: "10%", isCorrect: false },
+          { id: "a3", text: "Zero seller fees (they keep 100% of what they earn)", isCorrect: true },
+          { id: "a4", text: "5% plus gas fees", isCorrect: false }
         ]
       }
     ],
     correctAnswers: {
       q1: "a2",
-      q2: "a2"
+      q2: "a3"
     }
   },
   "4": {
-    title: "Mobile-First Accessibility",
-    description: "Explore Celo's Social Connect and phone-number identity system",
+    title: "IBFT Smart Chain",
+    description: "Test your knowledge of Electroneum's consensus mechanism.",
     nextUrl: "/electro-quests/5",
     questions: [
       {
         id: "q1",
-        question: "What is Celo Social Connect?",
+        question: "What consensus mechanism does Electroneum currently use?",
         answers: [
-          { id: "a1", text: "A social media platform", isCorrect: false },
-          { id: "a2", text: "A protocol that maps phone numbers to wallet addresses", isCorrect: true },
-          { id: "a3", text: "A chat application", isCorrect: false },
-          { id: "a4", text: "A DeFi lending protocol", isCorrect: false }
+          { id: "a1", text: "Proof of Work (PoW)", isCorrect: false },
+          { id: "a2", text: "Delegated Proof of Stake (DPoS)", isCorrect: false },
+          { id: "a3", text: "Istanbul Byzantine Fault Tolerance (IBFT)", isCorrect: true },
+          { id: "a4", text: "Proof of History (PoH)", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "Why is lightweight identity important on Celo?",
+        question: "What is a major benefit of the IBFT consensus?",
         answers: [
-          { id: "a1", text: "It makes the blockchain slower", isCorrect: false },
-          { id: "a2", text: "It enables sending crypto to anyone with just a phone number", isCorrect: true },
-          { id: "a3", text: "It is only needed for compliance", isCorrect: false },
-          { id: "a4", text: "It replaces smart contracts", isCorrect: false }
+          { id: "a1", text: "It allows mining with standard GPUs", isCorrect: false },
+          { id: "a2", text: "Fast transaction finality without the risk of chain reorgs", isCorrect: true },
+          { id: "a3", text: "It requires no validators", isCorrect: false },
+          { id: "a4", text: "It consumes massive amounts of electricity", isCorrect: false }
         ]
       }
     ],
     correctAnswers: {
-      q1: "a2",
+      q1: "a3",
       q2: "a2"
     }
   },
   "5": {
-    title: "Celo Ecosystem",
-    description: "Discover Valora, MiniPay, and the wider Celo ecosystem",
+    title: "EVM Compatibility",
+    description: "Understand Electroneum's integration with Ethereum tooling.",
     nextUrl: "/electro-quests/6",
     questions: [
       {
         id: "q1",
-        question: "What is Valora?",
+        question: "What does EVM compatibility mean for Electroneum?",
         answers: [
-          { id: "a1", text: "A desktop trading platform", isCorrect: false },
-          { id: "a2", text: "A mobile wallet built for the Celo ecosystem", isCorrect: true },
-          { id: "a3", text: "A centralized exchange", isCorrect: false },
-          { id: "a4", text: "A hardware wallet", isCorrect: false }
+          { id: "a1", text: "It can run Ethereum smart contracts with little to no modifications", isCorrect: true },
+          { id: "a2", text: "It is a token built on the Ethereum mainnet", isCorrect: false },
+          { id: "a3", text: "It requires developers to learn a brand new programming language", isCorrect: false },
+          { id: "a4", text: "It shares gas fees directly with Ethereum miners", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "What is Opera MiniPay?",
+        question: "Which popular wallet can be used with Electroneum due to EVM compatibility?",
         answers: [
-          { id: "a1", text: "A Celo-integrated mobile payment feature in the Opera browser", isCorrect: true },
-          { id: "a2", text: "A standalone crypto wallet", isCorrect: false },
-          { id: "a3", text: "A DeFi lending platform", isCorrect: false },
-          { id: "a4", text: "An NFT marketplace", isCorrect: false }
+          { id: "a1", text: "MetaMask", isCorrect: true },
+          { id: "a2", text: "Phantom", isCorrect: false },
+          { id: "a3", text: "Daedalus", isCorrect: false },
+          { id: "a4", text: "Electrum", isCorrect: false }
         ]
       }
     ],
     correctAnswers: {
-      q1: "a2",
+      q1: "a1",
       q2: "a1"
     }
   },
   "6": {
-    title: "Ethereum L2 Transition",
-    description: "Learn about Celo's transition to an Ethereum Layer 2",
+    title: "Enterprise Validators",
+    description: "Learn about network security on Electroneum.",
     nextUrl: "/electro-quests/7",
     questions: [
       {
         id: "q1",
-        question: "Why is Celo transitioning to an Ethereum L2?",
+        question: "Who secures the Electroneum network?",
         answers: [
-          { id: "a1", text: "To become incompatible with Ethereum", isCorrect: false },
-          { id: "a2", text: "To leverage Ethereum's security while maintaining Celo's features", isCorrect: true },
-          { id: "a3", text: "To abandon its mobile-first approach", isCorrect: false },
-          { id: "a4", text: "To remove stablecoin support", isCorrect: false }
+          { id: "a1", text: "Anonymous individual miners", isCorrect: false },
+          { id: "a2", text: "Known, trusted Enterprise Validators like NGOs and universities", isCorrect: true },
+          { id: "a3", text: "A single central server run by the Electroneum team", isCorrect: false },
+          { id: "a4", text: "Delegated nodes chosen by random lottery", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "What benefit does L2 status bring to Celo users?",
+        question: "What is a unique aspect of Electroneum's validators?",
         answers: [
-          { id: "a1", text: "Higher gas fees", isCorrect: false },
-          { id: "a2", text: "Access to Ethereum's vast liquidity and security guarantees", isCorrect: true },
-          { id: "a3", text: "Slower transaction times", isCorrect: false },
-          { id: "a4", text: "Fewer supported tokens", isCorrect: false }
+          { id: "a1", text: "They can rewrite transaction history", isCorrect: false },
+          { id: "a2", text: "Many use their block rewards to fund charitable and educational initiatives", isCorrect: true },
+          { id: "a3", text: "They require specialized ASIC hardware to participate", isCorrect: false },
+          { id: "a4", text: "They are completely hidden from the public", isCorrect: false }
         ]
       }
     ],
@@ -222,28 +200,28 @@ export const celoQuizData: Record<string, {
     }
   },
   "7": {
-    title: "Celo Reserve & Stability",
-    description: "Understand how Celo maintains stablecoin peg and reserve management",
+    title: "Micro-transactions",
+    description: "Test your knowledge on ETN's transaction structure.",
     nextUrl: "/electro-quests/8",
     questions: [
       {
         id: "q1",
-        question: "What backs the value of Celo stablecoins?",
+        question: "Why are micro-transactions feasible on Electroneum?",
         answers: [
-          { id: "a1", text: "Nothing, they are purely algorithmic", isCorrect: false },
-          { id: "a2", text: "The Celo Reserve, a diversified portfolio of crypto assets", isCorrect: true },
-          { id: "a3", text: "USD held in bank accounts only", isCorrect: false },
-          { id: "a4", text: "Gold reserves", isCorrect: false }
+          { id: "a1", text: "Because transactions are processed off-chain", isCorrect: false },
+          { id: "a2", text: "Because the network has near-zero gas fees", isCorrect: true },
+          { id: "a3", text: "Because it uses a centralized database for small transfers", isCorrect: false },
+          { id: "a4", text: "Because users bundle transactions once a month", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "How can users expand or contract the stablecoin supply?",
+        question: "What use case benefits most from micro-transactions?",
         answers: [
-          { id: "a1", text: "By mining new stablecoins", isCorrect: false },
-          { id: "a2", text: "Through the Mento exchange, trading CELO for stablecoins and vice versa", isCorrect: true },
-          { id: "a3", text: "Only the Foundation can do this", isCorrect: false },
-          { id: "a4", text: "Stablecoins have a fixed supply", isCorrect: false }
+          { id: "a1", text: "Buying real estate", isCorrect: false },
+          { id: "a2", text: "Daily wage payouts and tipping content creators", isCorrect: true },
+          { id: "a3", text: "Executing large institutional trades", isCorrect: false },
+          { id: "a4", text: "Staking large amounts of capital for long-term yield", isCorrect: false }
         ]
       }
     ],
@@ -253,28 +231,28 @@ export const celoQuizData: Record<string, {
     }
   },
   "8": {
-    title: "Regenerative Finance (ReFi)",
-    description: "Explore Celo's commitment to sustainability and positive environmental impact",
+    title: "Real-World Utility",
+    description: "Explore the practical uses of the Electroneum ecosystem.",
     nextUrl: "/electro-quests/9",
     questions: [
       {
         id: "q1",
-        question: "What is Regenerative Finance (ReFi) on Celo?",
+        question: "Which of the following is a common real-world use for ETN?",
         answers: [
-          { id: "a1", text: "A type of high-frequency trading", isCorrect: false },
-          { id: "a2", text: "Financial systems that create positive social and environmental outcomes", isCorrect: true },
-          { id: "a3", text: "A lending protocol", isCorrect: false },
-          { id: "a4", text: "A token launchpad", isCorrect: false }
+          { id: "a1", text: "Paying for Ethereum gas fees", isCorrect: false },
+          { id: "a2", text: "Purchasing mobile airtime and data top-ups", isCorrect: true },
+          { id: "a3", text: "Minting Bitcoin Ordinals", isCorrect: false },
+          { id: "a4", text: "Paying for traditional bank transfers", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "What role does the Celo Climate Collective play?",
+        question: "Why does Electroneum prioritize real-world utility over speculation?",
         answers: [
-          { id: "a1", text: "It tracks weather data on-chain", isCorrect: false },
-          { id: "a2", text: "It brings organizations together to fight climate change using blockchain technology", isCorrect: true },
-          { id: "a3", text: "It sells carbon credits exclusively", isCorrect: false },
-          { id: "a4", text: "It mines Bitcoin using renewable energy", isCorrect: false }
+          { id: "a1", text: "Because speculators are banned from holding the token", isCorrect: false },
+          { id: "a2", text: "Because its mission is to solve everyday problems for people in emerging markets", isCorrect: true },
+          { id: "a3", text: "Because it lacks a decentralized exchange", isCorrect: false },
+          { id: "a4", text: "Because the token value is strictly pegged to the US Dollar", isCorrect: false }
         ]
       }
     ],
@@ -284,65 +262,65 @@ export const celoQuizData: Record<string, {
     }
   },
   "9": {
-    title: "Developer Experience",
-    description: "Learn about building dApps and smart contracts on Celo",
+    title: "Sustainability",
+    description: "Learn about the environmental impact of Electroneum.",
     nextUrl: "/electro-quests/10",
     questions: [
       {
         id: "q1",
-        question: "What smart contract language does Celo support?",
+        question: "How does Electroneum's consensus mechanism impact its energy usage?",
         answers: [
-          { id: "a1", text: "Only Rust", isCorrect: false },
-          { id: "a2", text: "Solidity and all EVM-compatible languages", isCorrect: true },
-          { id: "a3", text: "Only Move", isCorrect: false },
-          { id: "a4", text: "Only JavaScript", isCorrect: false }
+          { id: "a1", text: "It requires massive server farms to run", isCorrect: false },
+          { id: "a2", text: "It is incredibly energy-efficient compared to Proof of Work networks", isCorrect: true },
+          { id: "a3", text: "It uses exactly the same energy as Bitcoin", isCorrect: false },
+          { id: "a4", text: "It requires validators to use diesel generators", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "What unique feature does Celo offer for gas fees?",
+        question: "Why is sustainability important for a global blockchain?",
         answers: [
-          { id: "a1", text: "Gas fees are always free", isCorrect: false },
-          { id: "a2", text: "Users can pay gas fees using stablecoins like cUSD", isCorrect: true },
-          { id: "a3", text: "Gas fees can only be paid in ETH", isCorrect: false },
-          { id: "a4", text: "There are no gas fees on Celo", isCorrect: false }
+          { id: "a1", text: "It aligns with global efforts to reduce carbon footprints and combat climate change", isCorrect: true },
+          { id: "a2", text: "It makes transactions slower and more secure", isCorrect: false },
+          { id: "a3", text: "It is a requirement for all smart contracts", isCorrect: false },
+          { id: "a4", text: "It increases the token price artificially", isCorrect: false }
         ]
       }
     ],
     correctAnswers: {
       q1: "a2",
-      q2: "a2"
+      q2: "a1"
     }
   },
   "10": {
-    title: "Global Inclusion",
-    description: "Discover how Celo enables financial access in emerging markets",
+    title: "Global Ecosystem",
+    description: "Discover the worldwide reach of Electroneum.",
     nextUrl: "/electro-victory",
     questions: [
       {
         id: "q1",
-        question: "How does Celo aim to serve the unbanked population?",
+        question: "In which regions has Electroneum seen significant adoption?",
         answers: [
-          { id: "a1", text: "By building physical bank branches", isCorrect: false },
-          { id: "a2", text: "Through mobile-accessible financial tools that only require a smartphone", isCorrect: true },
-          { id: "a3", text: "By issuing credit cards", isCorrect: false },
-          { id: "a4", text: "Through ATM networks", isCorrect: false }
+          { id: "a1", text: "Only in North America", isCorrect: false },
+          { id: "a2", text: "Africa, Latin America, and Asia", isCorrect: true },
+          { id: "a3", text: "Only in Europe", isCorrect: false },
+          { id: "a4", text: "Only in Antarctica", isCorrect: false }
         ]
       },
       {
         id: "q2",
-        question: "Which region has seen significant Celo adoption for mobile payments?",
+        question: "What role does Electroneum play in the broader Web3 ecosystem?",
         answers: [
-          { id: "a1", text: "North America only", isCorrect: false },
-          { id: "a2", text: "Africa and Latin America", isCorrect: true },
-          { id: "a3", text: "Antarctica", isCorrect: false },
-          { id: "a4", text: "Celo has no real-world adoption", isCorrect: false }
+          { id: "a1", text: "It acts as a bridge bringing real-world utility and unbanked users into the digital economy", isCorrect: true },
+          { id: "a2", text: "It serves exclusively as a privacy coin for anonymous transactions", isCorrect: false },
+          { id: "a3", text: "It competes directly with Bitcoin as a store of value", isCorrect: false },
+          { id: "a4", text: "It is a centralized database controlled by a single government", isCorrect: false }
         ]
       }
     ],
     correctAnswers: {
       q1: "a2",
-      q2: "a2"
+      q2: "a1"
     }
   }
 };

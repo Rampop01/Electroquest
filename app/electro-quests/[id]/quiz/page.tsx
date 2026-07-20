@@ -1,5 +1,5 @@
 import { QuizRoom } from "@/components/quiz-room"
-import { celoQuizData } from "@/lib/electro-quest-data"
+import { electroQuizData } from "@/lib/electro-quest-data"
 import { notFound } from "next/navigation"
 
 interface CeloQuizPageProps {
@@ -8,7 +8,7 @@ interface CeloQuizPageProps {
 
 export default async function CeloQuizPage({ params }: CeloQuizPageProps) {
   const { id } = await params
-  const quiz = celoQuizData[id]
+  const quiz = electroQuizData[id]
 
   if (!quiz) {
     notFound()
@@ -18,5 +18,5 @@ export default async function CeloQuizPage({ params }: CeloQuizPageProps) {
 }
 
 export async function generateStaticParams() {
-  return Object.keys(celoQuizData).map((id) => ({ id }))
+  return Object.keys(electroQuizData).map((id) => ({ id }))
 }

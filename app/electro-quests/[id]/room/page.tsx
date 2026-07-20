@@ -1,5 +1,5 @@
 import QuestRoom from "@/components/quest-room"
-import { celoQuestRooms } from "@/lib/electro-quest-data"
+import { electroQuestRooms } from "@/lib/electro-quest-data"
 import { notFound } from "next/navigation"
 
 interface ElectroquestRoomPageProps {
@@ -8,7 +8,7 @@ interface ElectroquestRoomPageProps {
 
 export default async function ElectroquestRoomPage({ params }: ElectroquestRoomPageProps) {
   const { id } = await params
-  const questData = celoQuestRooms[id as keyof typeof celoQuestRooms]
+  const questData = electroQuestRooms[id as keyof typeof electroQuestRooms]
 
   if (!questData) {
     notFound()
@@ -18,5 +18,5 @@ export default async function ElectroquestRoomPage({ params }: ElectroquestRoomP
 }
 
 export async function generateStaticParams() {
-  return Object.keys(celoQuestRooms).map((id) => ({ id }))
+  return Object.keys(electroQuestRooms).map((id) => ({ id }))
 }

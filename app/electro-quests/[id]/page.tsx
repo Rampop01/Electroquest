@@ -1,5 +1,5 @@
 import { AncientScroll } from "@/components/ancient-scroll"
-import { celoScrollContent } from "@/lib/electro-quest-data"
+import { electroScrollContent } from "@/lib/electro-quest-data"
 import { notFound } from "next/navigation"
 
 interface ScrollPageProps {
@@ -8,7 +8,7 @@ interface ScrollPageProps {
 
 export default async function CeloScrollPage({ params }: ScrollPageProps) {
   const { id } = await params
-  const scrollData = celoScrollContent[id]
+  const scrollData = electroScrollContent[id]
 
   if (!scrollData) {
     notFound()
@@ -51,7 +51,7 @@ export default async function CeloScrollPage({ params }: ScrollPageProps) {
 }
 
 export async function generateStaticParams() {
-  return Object.keys(celoScrollContent).map((id) => ({
+  return Object.keys(electroScrollContent).map((id) => ({
     id,
   }))
 }
