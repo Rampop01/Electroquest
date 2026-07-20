@@ -19,7 +19,7 @@ export default function PathSelectionPage() {
             </h1>
             <div className="mt-6 w-48 h-1 mx-auto bg-gradient-to-r from-transparent via-glow-amber to-transparent animate-shimmer mb-8" />
             <p className="font-[family-name:var(--font-cinzel)] text-center max-w-md mx-auto text-foreground/80 text-lg md:text-xl leading-relaxed">
-              Select your journey into the world of Celo. Your adventure begins here.
+              Select your journey into the world of Electroneum. Your adventure begins here.
             </p>
           </div>
 
@@ -62,9 +62,9 @@ export default function PathSelectionPage() {
             {/* Celo Path - For Advanced Users */}
             <div className="relative group bg-stone-900/70 border border-cyan-500/30 rounded-xl p-8 backdrop-blur-sm hover:bg-stone-900/90 transition-all duration-300 hover:shadow-glow-cyan">
               <div className="mb-6">
-                <h3 className="font-[family-name:var(--font-cinzel)] text-2xl font-bold text-glow-cyan mb-4 tracking-wider">Celo Adventurer</h3>
+                <h3 className="font-[family-name:var(--font-cinzel)] text-2xl font-bold text-glow-cyan mb-4 tracking-wider">Electroneum Adventurer</h3>
                 <p className="font-[family-name:var(--font-cinzel)] text-foreground/80 mb-6">
-                  Ready for the real deal? Dive into Celo's mobile-first ecosystem, MiniPay integrations, 
+                  Ready for the real deal? Dive into Electroneum's mobile-first ecosystem, integrations, 
                   and real-world impact projects.
                 </p>
                 <ul className="space-y-2 mb-8">
@@ -86,7 +86,7 @@ export default function PathSelectionPage() {
                 href="/electro-quests"
                 className="inline-flex items-center justify-center w-full py-3 px-6 text-center font-medium bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-stone-900 rounded-lg transition-all duration-200 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.5)] font-[family-name:var(--font-cinzel)] tracking-wider"
               >
-                Start Celo Adventure
+                Start Electroneum Adventure
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>

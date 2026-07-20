@@ -7,12 +7,12 @@ import { useState, useEffect } from 'react'
 import { Coins, Wallet, ArrowUpRight, TrendingUp } from 'lucide-react'
 
 export function WealthDisplay() {
-  const [balance, setBalance] = useState({ celo: 0, cusd: 0 })
+  const [balance, setBalance] = useState({ electroneum: 0, usdt: 0 })
 
   useEffect(() => {
     // Simulate balance loading
     const timer = setTimeout(() => {
-      setBalance({ celo: 125.42, cusd: 450.00 })
+      setBalance({ electroneum: 125.42, usdt: 450.00 })
     }, 1000)
     return () => clearTimeout(timer)
   }, [])
@@ -32,7 +32,7 @@ export function WealthDisplay() {
         <div>
           <h4 className="text-white/60 text-xs font-bold uppercase tracking-widest">Available Balance</h4>
           <p className="text-2xl font-black text-white font-mono">
-            ${(balance.celo * 0.8 + balance.cusd).toFixed(2)}
+            ${(balance.electroneum * 0.8 + balance.usdt).toFixed(2)}
           </p>
         </div>
       </div>
@@ -44,12 +44,12 @@ export function WealthDisplay() {
               <span className="text-secondary font-bold text-xs">C</span>
             </div>
             <div>
-              <p className="text-sm font-bold text-white">CELO</p>
+              <p className="text-sm font-bold text-white">ETN</p>
               <p className="text-[10px] text-white/40">Native Asset</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-sm font-bold text-white">{balance.celo} CELO</p>
+            <p className="text-sm font-bold text-white">{balance.electroneum} ETN</p>
             <p className="text-[10px] text-secondary">+$12.4%</p>
           </div>
         </div>
@@ -61,11 +61,11 @@ export function WealthDisplay() {
             </div>
             <div>
               <p className="text-sm font-bold text-white">cUSD</p>
-              <p className="text-[10px] text-white/40">Celo Dollar</p>
+              <p className="text-[10px] text-white/40">USDT</p>
             </div>
           </div>
           <div className="text-right">
-            <p className="text-sm font-bold text-white">{balance.cusd.toFixed(2)} cUSD</p>
+            <p className="text-sm font-bold text-white">{balance.usdt.toFixed(2)} USDT</p>
             <p className="text-[10px] text-primary">Stable</p>
           </div>
         </div>

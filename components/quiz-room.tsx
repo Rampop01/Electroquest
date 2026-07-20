@@ -24,7 +24,7 @@ interface Question {
 interface QuizRoomProps {
   questions: Question[]
   questId: string
-  questType: "ethereum" | "celo"
+  questType: "ethereum" | "electroneum"
 }
 
 export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
@@ -116,7 +116,7 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
 
     try {
       await claimProgress({
-        questType: questType === "celo" ? 1 : 0,
+        questType: questType === "electroneum" ? 1 : 0,
         questId: Number(questId),
         quizScore: score * 10, // Convert 7/10 to 70%
         timeTaken: 120, // Hardcoded time for now
@@ -141,7 +141,7 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
   // Listen for successful confirmation to update local UI state and redirect
   useEffect(() => {
     if (isConfirmed) {
-      const storageKey = questType === "celo" ? "celoQuestProgress" : "ethereumQuestProgress"
+      const storageKey = questType === "electroneum" ? "electroQuestProgress" : "ethereumQuestProgress"
       const savedProgress = localStorage.getItem(storageKey)
       const progress = savedProgress ? JSON.parse(savedProgress) : {}
 

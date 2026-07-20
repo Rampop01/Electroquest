@@ -2,11 +2,11 @@ import { PortalAnimation } from "@/components/portal-animation"
 import { GameButton } from "@/components/game-button"
 import Link from "next/link"
 
-interface CeloVictoryPageProps {
+interface ElectroVictoryPageProps {
   params: Promise<{ id: string }>
 }
 
-export default async function CeloVictoryPage({ params }: CeloVictoryPageProps) {
+export default async function ElectroVictoryPage({ params }: ElectroVictoryPageProps) {
   const { id } = await params
   const nextQuestId = String(Number(id) + 1)
   const hasNextQuest = Number(id) < 10

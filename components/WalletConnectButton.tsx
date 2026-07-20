@@ -59,7 +59,7 @@ export function WalletConnectButton() {
           onClick={() => switchChain({ chainId: ELECTRONEUM_NETWORK.id })}
           className={gamingBtnClassCyan}
         >
-          Enter Celo
+          Enter Electroneum
         </button>
         <button onClick={() => disconnect()} className={gamingBtnClassRed}>
           Flee

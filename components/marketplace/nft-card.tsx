@@ -47,7 +47,7 @@ export function NftCard({ item }: { item: NFTItem }) {
           <div>
             <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Price</div>
             <div className="font-bold text-glow-amber flex items-center gap-1">
-              <span className="text-xl">{item.price}</span> CELO
+              <span className="text-xl">{item.price}</span> ETN
             </div>
           </div>
           

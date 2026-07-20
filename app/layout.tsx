@@ -27,7 +27,7 @@ export const viewport = {
 
 export const metadata: Metadata = {
   title: "Electroquest - Prosperity Through Knowledge",
-  description: "Embark on a digital journey to master the Celo ecosystem and unlock prosperity.",
+  description: "Embark on a digital journey to master the Electroneum ecosystem and unlock prosperity.",
   generator: "v0.app",
   icons: {
     icon: [

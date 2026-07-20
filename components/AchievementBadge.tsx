@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 
 export function AchievementBadge({ type, level }: { type: 'explorer' | 'builder' | 'stable' | 'governor', level: number }) {
   const configs = {
-    explorer: { icon: Zap, label: 'Celo Explorer', color: 'text-primary border-primary/30 bg-primary/10' },
+    explorer: { icon: Zap, label: 'Electroneum Explorer', color: 'text-primary border-primary/30 bg-primary/10' },
     builder: { icon: Award, label: 'System Builder', color: 'text-secondary border-secondary/30 bg-secondary/10' },
     stable: { icon: Shield, label: 'Stability Guard', color: 'text-primary border-primary/30 bg-primary/10' },
     governor: { icon: Star, label: 'Ecosystem Governor', color: 'text-secondary border-secondary/30 bg-secondary/10' }

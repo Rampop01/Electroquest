@@ -8,7 +8,7 @@ import { electroQuestRooms } from '@/lib/electro-quest-data';
 
 interface QuestRoomProps {
   questId: string;
-  questType?: 'ethereum' | 'celo'; // Add questType prop
+  questType?: 'ethereum' | 'electroneum'; // Add questType prop
 }
 
 export default function QuestRoom({ questId, questType }: QuestRoomProps) {
@@ -25,15 +25,15 @@ export default function QuestRoom({ questId, questType }: QuestRoomProps) {
   const questData = (() => {
     // Primary detection: Use pathname (most reliable)
     const isEthereumRoute = pathname?.startsWith('/quest/');
-    const isCeloRoute = pathname?.includes('/electro-quests/') && pathname?.includes('/room');
+    const isElectroRoute = pathname?.includes('/electro-quests/') && pathname?.includes('/room');
     
     // Route-based detection (primary method)
     if (isEthereumRoute) {
       return questRooms[questId as keyof typeof questRooms]; // Ethereum quest data: NODE, GAS, CONTRACT, etc.
     }
     
-    if (isCeloRoute) {
-      return electroQuestRooms[questId as keyof typeof electroQuestRooms]; // Celo quest data: MOBILE, ROLLUP, etc.
+    if (isElectroRoute) {
+      return electroQuestRooms[questId as keyof typeof electroQuestRooms]; // Electroneum quest data: MOBILE, ROLLUP, etc.
     }
     
     // Backup: Use explicit questType prop (already passed from route pages)
@@ -41,7 +41,7 @@ export default function QuestRoom({ questId, questType }: QuestRoomProps) {
       return questRooms[questId as keyof typeof questRooms];
     }
     
-    if (questType === 'celo') {
+    if (questType === 'electroneum') {
       return electroQuestRooms[questId as keyof typeof electroQuestRooms];
     }
     
@@ -827,10 +827,10 @@ export default function QuestRoom({ questId, questType }: QuestRoomProps) {
   const handleProceed = () => {
     // Navigate to correct quiz based on quest type
     const isEthereumRoute = pathname?.startsWith('/quest/');
-    const isCeloRoute = pathname?.includes('/electro-quests/') && pathname?.includes('/room');
+    const isElectroRoute = pathname?.includes('/electro-quests/') && pathname?.includes('/room');
     
-    if (questType === 'celo' || isCeloRoute) {
-      // Celo quest → go to Celo quiz
+    if (questType === 'electroneum' || isElectroRoute) {
+      // Electroneum quest → go to Electroneum quiz
       router.push(`/electro-quests/${questId}/quiz`);
     } else if (questType === 'ethereum' || isEthereumRoute) {
       // Ethereum quest → go to Ethereum quiz

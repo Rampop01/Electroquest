@@ -5,7 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, MeshDistortMaterial, Sphere, MeshWobbleMaterial, OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import * as THREE from 'three'
 
-function CeloArtifact() {
+function ElectroArtifact() {
   const meshRef = useRef<THREE.Mesh>(null)
   const [hovered, setHover] = useState(false)
 
@@ -52,7 +52,7 @@ export function HeroScene() {
         <pointLight position={[-10, -10, -10]} intensity={1} color="#FBCC5C" />
         <spotLight position={[0, 5, 0]} intensity={2} color="#45D0D5" />
         
-        <CeloArtifact />
+        <ElectroArtifact />
         
         <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
       </Canvas>
