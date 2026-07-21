@@ -2,11 +2,11 @@
 export const CONTRACT_ADDRESSES = {
   // Electroneum Mainnet (Chain ID: 52014)
   ELECTRONEUM: {
-    XP_TOKEN: '0x40964fe5ad88565a1cc144c567e446efa3464483' as `0x${string}`,
-    CHAPTER_NFT: '0x4e703a7f1c21e9ca2236a79ae2ba77d892ba4b75' as `0x${string}`,
-    LEADERBOARD: '0x664653fbd55982eba38328f2be408e93280133db' as `0x${string}`,
-    GAME_CORE: '0x4119c4b90bbd7b9f598c53a44294fa05fe9f26fd' as `0x${string}`,
-    REWARD_SIGNER: '0x99D8fed31b609c1B24cb38094b45E97384Ed9D55' as `0x${string}`,
+    XP_TOKEN: '0x772100f3518A6f0498f83F6a3f0248c0d59b7c2C' as `0x${string}`,
+    CHAPTER_NFT: '0x507D08C137ca6A3e10462Db241dc93e92aDB53aB' as `0x${string}`,
+    LEADERBOARD: '0x3eC3AAb4d8Ed3C324F5Fe49Ec6872357cdeB1bD6' as `0x${string}`,
+    GAME_CORE: '0xbF4b47E05f0f94e9C264847C1B93f26829dEe4bF' as `0x${string}`,
+    REWARD_SIGNER: '0xb216270aFB9DfcD611AFAf785cEB38250863F2C9' as `0x${string}`,
   }
 } as const;
 

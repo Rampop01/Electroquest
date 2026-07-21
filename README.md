@@ -210,8 +210,14 @@ Deploy the Next.js application to Vercel or your preferred hosting provider.
 
 ### Smart Contracts
 
-#### Electroneum Network
+#### Electroneum Testnet
 
-*Contracts will be deployed soon to the Electroneum network.*
+The smart contracts are actively deployed on the **Electroneum Testnet**:
 
-RPC: `https://rpc.electroneum.com`
+- **XPToken**: `0x772100f3518A6f0498f83F6a3f0248c0d59b7c2C`
+- **ChapterNFT**: `0x507D08C137ca6A3e10462Db241dc93e92aDB53aB`
+- **Leaderboard**: `0x3eC3AAb4d8Ed3C324F5Fe49Ec6872357cdeB1bD6`
+- **GameCore**: `0xbF4b47E05f0f94e9C264847C1B93f26829dEe4bF`
+
+RPC: `https://rpc.ankr.com/electroneum_testnet`
+Chain ID: `5201420`
