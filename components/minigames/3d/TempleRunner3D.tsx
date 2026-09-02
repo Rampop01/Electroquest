@@ -825,11 +825,12 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         ball.rotation.x += 0.03
 
         const pPos = state.player!.position
-        if (
-          Math.abs(ball.position.z - pPos.z) < 1.15 &&
-          Math.abs(ball.position.x - pPos.x) < 1.05 &&
-          pPos.y < 1.6
-        ) {
+        // Generous, guaranteed pickup hitbox (Z: 1.8 units, X: 1.4 units, Y: within jump range)
+        const inZRange = Math.abs(ball.position.z - pPos.z) < 1.8
+        const inXRange = Math.abs(ball.position.x - pPos.x) < 1.4
+        const inYRange = pPos.y < 2.8 // Easily collected whether running or jumping
+
+        if (inZRange && inXRange && inYRange) {
           audioRef.current?.playBallPickup()
           ball.position.z = -450 - Math.random() * 50
           ball.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
@@ -846,7 +847,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
               onComplete()
             }, 1600)
           }
-        } else if (ball.position.z > 10) {
+        } else if (ball.position.z > 12) {
           ball.position.z = -450 - Math.random() * 50
           ball.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
         }
@@ -857,11 +858,15 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         obs.position.z += state.speed
 
         const pPos = state.player!.position
-        if (
-          Math.abs(obs.position.z - pPos.z) < 1.05 &&
-          Math.abs(obs.position.x - pPos.x) < 0.95 &&
-          pPos.y < 1.1
-        ) {
+        const inZ = Math.abs(obs.position.z - pPos.z) < 1.2
+        const inX = Math.abs(obs.position.x - pPos.x) < 0.95
+
+        // Low obstacle vs Tall obstacle collision
+        const isLowObstacle = obs.position.y <= 0.6
+        // If low obstacle and jumping high enough, successfully leaped over!
+        const hitHazard = isLowObstacle ? pPos.y < 0.8 : true
+
+        if (inZ && inX && hitHazard) {
           audioRef.current?.playHit()
           obs.position.z = -450 - Math.random() * 50
           state.health -= 1
@@ -872,7 +877,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
             audioRef.current?.stopBgm()
             setGameOver(true)
           }
-        } else if (obs.position.z > 10) {
+        } else if (obs.position.z > 12) {
           obs.position.z = -450 - Math.random() * 50
           obs.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
         }
