@@ -197,7 +197,7 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
                   style={{ fontFamily: 'var(--font-cinzel)' }}
                   className="text-xl text-foreground/80 mb-6"
                 >
-                  You have proven your wisdom and passed the trial.
+                  You have proven your wisdom and conquered this quest.
                 </p>
               </>
             ) : (

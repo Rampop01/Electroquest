@@ -11,7 +11,7 @@ export interface GameInstruction {
 export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   1: {
     title: "Temple Runner: ETN Gathering",
-    subtitle: "Stage 1 Trial • Electroneum Foundations",
+    subtitle: "Stage 1 Quest • Electroneum Foundations",
     objective: "Sprint down the ancient corridor, dodge the rotating spike hazards, and collect 30 golden ETN energy coins to open the portal.",
     reward: "5 ETN + 100 XP + Foundation Rune",
     desktopControls: ["A / D or Left / Right Arrows to switch lanes", "Space to Jump over low obstacles"],
@@ -20,7 +20,7 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   },
   2: {
     title: "Validator Defense: Anomaly Purge",
-    subtitle: "Stage 2 Trial • IBFT 2.0 Consensus",
+    subtitle: "Stage 2 Quest • IBFT 2.0 Consensus",
     objective: "Protect the central validator sanctuary crystals from 12 corrupted network anomalies by aiming and blasting laser bolts.",
     reward: "5 ETN + 100 XP + Consensus Rune",
     desktopControls: ["Click anywhere on screen to fire laser bolts in that direction"],
@@ -29,7 +29,7 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   },
   3: {
     title: "Dungeon Labyrinth: Relic Recovery",
-    subtitle: "Stage 3 Trial • AnyTask Ecosystem",
+    subtitle: "Stage 3 Quest • AnyTask Ecosystem",
     objective: "Navigate the winding stone maze, recover all 3 ancient Electroneum Relics, dodge the patrolling sentinel drone, and reach the golden exit portal.",
     reward: "5 ETN + 100 XP + AnyTask Seal",
     desktopControls: ["W A S D or Arrow Keys to walk through the labyrinth"],
@@ -38,7 +38,7 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   },
   4: {
     title: "Sky Platformer: Finality Leap",
-    subtitle: "Stage 4 Trial • 5-Second Deterministic Finality",
+    subtitle: "Stage 4 Quest • 5-Second Deterministic Finality",
     objective: "Leap across 4 floating cosmic stone islands, collect the 4 Finality Runes, and reach the glowing Finality Apex without falling into the void.",
     reward: "5 ETN + 100 XP + Finality Rune",
     desktopControls: ["A / D to move sideways, W / S for depth", "Space to Jump across island gaps"],
@@ -47,7 +47,7 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   },
   5: {
     title: "EVM Opcode Stack: Smart Contract Forge",
-    subtitle: "Stage 5 Trial • EVM & Solidity Compatibility",
+    subtitle: "Stage 5 Quest • EVM & Solidity Compatibility",
     objective: "Time your drops from the swinging crane to stack 5 Solidity opcode blocks (PUSH32, MSTORE, CALL, RETURN) into a stable tower.",
     reward: "5 ETN + 100 XP + EVM Spire",
     desktopControls: ["Press Spacebar or Click anywhere to release the swinging block"],
@@ -56,7 +56,7 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   },
   6: {
     title: "Orbital Enterprise Shield",
-    subtitle: "Stage 6 Trial • Academic & NGO Validators",
+    subtitle: "Stage 6 Quest • Academic & NGO Validators",
     objective: "Rotate your orbital energy shield around the central node to deflect 12 incoming cyber-attacks away from Cambridge & Oxford validator nodes.",
     reward: "5 ETN + 100 XP + Enterprise Aegis",
     desktopControls: ["Move your mouse cursor or use A / D keys to spin the orbital shield"],
@@ -65,7 +65,7 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   },
   7: {
     title: "Micro-Warp Tunnel Flight",
-    subtitle: "Stage 7 Trial • Near-Zero Gas & Instant Routing",
+    subtitle: "Stage 7 Quest • Near-Zero Gas & Instant Routing",
     objective: "Fly your energy probe down the high-speed cyber warp tunnel. Steer through 8 golden Gas Boost rings while dodging firewall obstacles.",
     reward: "5 ETN + 100 XP + Warp Conduit",
     desktopControls: ["W A S D or Arrow Keys to steer up, down, left, right in the tunnel"],
@@ -74,7 +74,7 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   },
   8: {
     title: "Global Utility Grid: 160+ Country Mesh",
-    subtitle: "Stage 8 Trial • Real-World Mobile Utility",
+    subtitle: "Stage 8 Quest • Real-World Mobile Utility",
     objective: "Connect the global real-world utility mesh by tapping 5 key telecommunication hubs around the 3D Earth (London, Lagos, Nairobi, Sao Paulo, Manila).",
     reward: "5 ETN + 100 XP + Global Mesh Rune",
     desktopControls: ["Click directly on pulsing country hubs to link them to the Electroneum grid"],
@@ -83,7 +83,7 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   },
   9: {
     title: "Eco-Validator Solar Prism",
-    subtitle: "Stage 9 Trial • Green & Zero-Carbon Network",
+    subtitle: "Stage 9 Quest • Green & Zero-Carbon Network",
     objective: "Rotate 3 crystal prisms to direct solar photon light rays into the zero-carbon consensus crystal until it reaches 100% clean power.",
     reward: "5 ETN + 100 XP + Solar Core",
     desktopControls: ["Click on each prism to rotate it by 45 degrees until the beam connects"],
@@ -91,8 +91,8 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
     proTip: "Prism 1 reflects to Prism 2, Prism 2 reflects to Prism 3, and Prism 3 charges the core.",
   },
   10: {
-    title: "The Aurelius Grand Arena: Boss Trial",
-    subtitle: "Stage 10 Trial • Master of Electroneum",
+    title: "The Aurelius Grand Arena: Boss Battle",
+    subtitle: "Stage 10 • Final Boss of Electroneum",
     objective: "Conquer the ancient Aurelius Guardian! Jump over expanding shockwave energy rings, collect all 4 Grand Relics (IBFT, EVM, AnyTask, ETN), and crown the altar.",
     reward: "5 ETN + 100 XP + Grand Master Aurelius Trophy",
     desktopControls: ["W A S D to move around the arena", "Space to Jump over expanding shockwave rings"],
