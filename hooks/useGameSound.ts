@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useEffect, useState } from 'react'
 
 type SoundType = 'click' | 'success' | 'fail' | 'unlock' | 'collect' | 'whoosh' | 'correct' | 'wrong' | 'ambient'
 
@@ -8,7 +8,6 @@ interface SoundConfig {
   duration: number
   gain: number
   type: OscillatorType
-  envelope?: { attack: number; decay: number; sustain: number; release: number }
 }
 
 const SOUNDS: Record<string, SoundConfig> = {
@@ -22,19 +21,38 @@ const SOUNDS: Record<string, SoundConfig> = {
   whoosh: { frequency: 200, duration: 0.3, gain: 0.15, type: 'sine' },
 }
 
+const SOUND_STORAGE_KEY = 'electroquest_sound_enabled'
+
 let globalSoundEnabled = true
+if (typeof window !== 'undefined') {
+  const saved = localStorage.getItem(SOUND_STORAGE_KEY)
+  if (saved !== null) {
+    globalSoundEnabled = saved === 'true'
+  }
+}
 
 export function useGameSound() {
   const audioCtxRef = useRef<AudioContext | null>(null)
+  const [soundEnabled, setSoundEnabled] = useState(globalSoundEnabled)
+
+  useEffect(() => {
+    const handleStorage = () => {
+      setSoundEnabled(globalSoundEnabled)
+    }
+    window.addEventListener('electroquest-sound-change', handleStorage)
+    return () => window.removeEventListener('electroquest-sound-change', handleStorage)
+  }, [])
 
   const getCtx = useCallback(() => {
-    if (!audioCtxRef.current) {
+    if (!audioCtxRef.current && typeof window !== 'undefined') {
       try {
-        audioCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext
+        if (AudioContextClass) {
+          audioCtxRef.current = new AudioContextClass()
+        }
       } catch { return null }
     }
-    // Resume if suspended (mobile autoplay policy)
-    if (audioCtxRef.current.state === 'suspended') {
+    if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
       audioCtxRef.current.resume().catch(() => {})
     }
     return audioCtxRef.current
@@ -57,17 +75,14 @@ export function useGameSound() {
     osc.type = config.type
     osc.frequency.setValueAtTime(config.frequency, now)
 
-    // For success, play a chord sweep
     if (type === 'success') {
       osc.frequency.setValueAtTime(523, now)
       osc.frequency.setValueAtTime(659, now + 0.15)
       osc.frequency.setValueAtTime(784, now + 0.3)
     }
-    // For unlock, sweep up
     if (type === 'unlock') {
       osc.frequency.exponentialRampToValueAtTime(1046, now + 0.4)
     }
-    // For wrong, sweep down
     if (type === 'wrong' || type === 'fail') {
       osc.frequency.exponentialRampToValueAtTime(80, now + config.duration)
     }
@@ -82,10 +97,15 @@ export function useGameSound() {
 
   const toggle = useCallback(() => {
     globalSoundEnabled = !globalSoundEnabled
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(SOUND_STORAGE_KEY, String(globalSoundEnabled))
+      window.dispatchEvent(new CustomEvent('electroquest-sound-change', { detail: globalSoundEnabled }))
+    }
+    setSoundEnabled(globalSoundEnabled)
     return globalSoundEnabled
   }, [])
 
   const isEnabled = () => globalSoundEnabled
 
-  return { playSound, toggle, isEnabled }
+  return { playSound, toggle, isEnabled, soundEnabled }
 }

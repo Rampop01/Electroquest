@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { Trophy, Zap, Heart, ArrowLeft, ArrowRight, ArrowUp, RefreshCw, Pause, Play, Volume2, VolumeX } from "lucide-react"
+import { useGameSound } from "@/hooks/useGameSound"
 
 interface TempleRunner3DProps {
   questId: string
@@ -18,7 +19,12 @@ class RunnerAudioEngine {
   private bgmStep = 0
 
   constructor() {
-    // Lazy initialized on first user gesture
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("electroquest_sound_enabled")
+      if (saved !== null) {
+        this.isMuted = saved === "false"
+      }
+    }
   }
 
   private getContext(): AudioContext | null {
@@ -34,14 +40,11 @@ class RunnerAudioEngine {
     return this.ctx
   }
 
-  public toggleMute(): boolean {
-    this.isMuted = !this.isMuted
+  public setMuted(muted: boolean) {
+    this.isMuted = muted
     if (this.isMuted) {
       this.stopBgm()
-    } else {
-      this.startBgm()
     }
-    return this.isMuted
   }
 
   // Subway Surfer style Coin / Energy Ball Ding
@@ -248,8 +251,9 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
   const [gameOver, setGameOver] = useState(false)
   const [victory, setVictory] = useState(false)
   const [userPaused, setUserPaused] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
   const targetScore = 20 // Collect 20 Energy Balls to win 2 ETN
+
+  const { soundEnabled, toggle: toggleGlobalSound } = useGameSound()
 
   const audioRef = useRef<RunnerAudioEngine | null>(null)
   if (!audioRef.current && typeof window !== "undefined") {
@@ -260,12 +264,22 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
   const isPausedRef = useRef(effectivePaused)
   useEffect(() => {
     isPausedRef.current = effectivePaused
-    if (effectivePaused) {
-      audioRef.current?.stopBgm()
-    } else if (!gameOver && !victory) {
+  }, [effectivePaused])
+
+  useEffect(() => {
+    audioRef.current?.setMuted(!soundEnabled)
+    if (soundEnabled && !effectivePaused && !gameOver && !victory) {
       audioRef.current?.startBgm()
+    } else {
+      audioRef.current?.stopBgm()
     }
-  }, [effectivePaused, gameOver, victory])
+  }, [soundEnabled, effectivePaused, gameOver, victory])
+
+  useEffect(() => {
+    return () => {
+      audioRef.current?.cleanup()
+    }
+  }, [])
 
   const gameStateRef = useRef({
     scene: null as THREE.Scene | null,
@@ -790,7 +804,10 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
             audioRef.current?.stopBgm()
             audioRef.current?.playVictory()
             setVictory(true)
-            setTimeout(() => onComplete(), 1600)
+            setTimeout(() => {
+              audioRef.current?.cleanup()
+              onComplete()
+            }, 1600)
           }
         } else if (ball.position.z > 10) {
           ball.position.z = -450 - Math.random() * 50
@@ -927,11 +944,11 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
           </div>
 
           <button
-            onClick={toggleSound}
-            title={isMuted ? "Unmute Runner Audio" : "Mute Runner Audio"}
+            onClick={toggleGlobalSound}
+            title={soundEnabled ? "Mute Game Audio" : "Unmute Game Audio"}
             className="p-1.5 bg-stone-900/80 hover:bg-stone-800 border border-white/20 rounded-full text-stone-300 hover:text-amber-400 transition-colors shadow-md cursor-pointer"
           >
-            {isMuted ? <VolumeX className="w-4 h-4 text-stone-500" /> : <Volume2 className="w-4 h-4 text-amber-400 animate-pulse" />}
+            {soundEnabled ? <Volume2 className="w-4 h-4 text-amber-400 animate-pulse" /> : <VolumeX className="w-4 h-4 text-stone-500" />}
           </button>
         </div>
 
