@@ -7,15 +7,21 @@ import { Trophy, Zap, Heart, ArrowLeft, ArrowRight, ArrowUp, RefreshCw } from "l
 interface TempleRunner3DProps {
   questId: string
   onComplete: () => void
+  isPaused?: boolean
 }
 
-export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
+export function TempleRunner3D({ questId, onComplete, isPaused = false }: TempleRunner3DProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [score, setScore] = useState(0)
   const [health, setHealth] = useState(3)
   const [gameOver, setGameOver] = useState(false)
   const [victory, setVictory] = useState(false)
-  const targetScore = 30 // 30 ETN energy points to clear the trial
+  const targetScore = 20 // Collect 20 Energy Balls to win 2 ETN
+
+  const isPausedRef = useRef(isPaused)
+  useEffect(() => {
+    isPausedRef.current = isPaused
+  }, [isPaused])
 
   const gameStateRef = useRef({
     scene: null as THREE.Scene | null,
@@ -27,8 +33,7 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
     playerLane: 0, // -1 (Left), 0 (Center), 1 (Right)
     isJumping: false,
     jumpVelocity: 0,
-    speed: 0.35,
-    distance: 0,
+    speed: 0.26,
     score: 0,
     health: 3,
     active: true,
@@ -51,11 +56,11 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
 
     const scene = new THREE.Scene()
     scene.background = new THREE.Color(0x0a0908)
-    scene.fog = new THREE.FogExp2(0x0a0908, 0.02)
+    scene.fog = new THREE.FogExp2(0x0a0908, 0.015)
 
     const camera = new THREE.PerspectiveCamera(65, width / height, 0.1, 1000)
-    camera.position.set(0, 3.5, 7)
-    camera.lookAt(0, 1.5, -5)
+    camera.position.set(0, 3.8, 7.5)
+    camera.lookAt(0, 1.6, -6)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(width, height)
@@ -64,20 +69,20 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
     container.appendChild(renderer.domElement)
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
     scene.add(ambientLight)
 
-    const dirLight = new THREE.DirectionalLight(0xfbbf24, 1.2)
-    dirLight.position.set(5, 12, 10)
+    const dirLight = new THREE.DirectionalLight(0xfbbf24, 1.4)
+    dirLight.position.set(5, 14, 10)
     dirLight.castShadow = true
     scene.add(dirLight)
 
-    const playerLight = new THREE.PointLight(0x06b6d4, 2, 8)
+    const playerLight = new THREE.PointLight(0x06b6d4, 2.5, 9)
     playerLight.position.set(0, 2, 0)
     scene.add(playerLight)
 
     // Temple Floor Runway
-    const floorGeo = new THREE.PlaneGeometry(12, 400, 10, 100)
+    const floorGeo = new THREE.PlaneGeometry(12, 500, 10, 100)
     const floorMat = new THREE.MeshStandardMaterial({
       color: 0x1c1917,
       roughness: 0.8,
@@ -85,41 +90,39 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
     })
     const floor = new THREE.Mesh(floorGeo, floorMat)
     floor.rotation.x = -Math.PI / 2
-    floor.position.z = -150
+    floor.position.z = -200
     floor.receiveShadow = true
     scene.add(floor)
 
     // Floor Glowing Grid Lines
     const lineMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b })
-    for (const laneX of [-2, 0, 2]) {
-      const lineGeo = new THREE.PlaneGeometry(0.1, 400)
+    for (const laneX of [-2.2, 0, 2.2]) {
+      const lineGeo = new THREE.PlaneGeometry(0.12, 500)
       const line = new THREE.Mesh(lineGeo, lineMat)
       line.rotation.x = -Math.PI / 2
-      line.position.set(laneX, 0.01, -150)
+      line.position.set(laneX, 0.01, -200)
       scene.add(line)
     }
 
-    // Temple Wall Pillars
-    for (let z = -300; z <= 20; z += 15) {
-      for (const side of [-5.5, 5.5]) {
-        const pillarGeo = new THREE.CylinderGeometry(0.5, 0.6, 8, 8)
+    // Temple Wall Pillars & Torches
+    for (let z = -400; z <= 20; z += 16) {
+      for (const side of [-5.8, 5.8]) {
+        const pillarGeo = new THREE.CylinderGeometry(0.5, 0.65, 8, 8)
         const pillarMat = new THREE.MeshStandardMaterial({ color: 0x292524 })
         const pillar = new THREE.Mesh(pillarGeo, pillarMat)
         pillar.position.set(side, 4, z)
         scene.add(pillar)
 
-        // Torch on pillar
-        const torchLight = new THREE.PointLight(0xf59e0b, 1.2, 12)
+        const torchLight = new THREE.PointLight(0xf59e0b, 1.2, 14)
         torchLight.position.set(side * 0.85, 4.5, z)
         scene.add(torchLight)
       }
     }
 
-    // Hero Character (Glowing Elemental Knight)
+    // Hero Character
     const playerGroup = new THREE.Group()
 
-    // Body
-    const bodyGeo = new THREE.BoxGeometry(0.8, 1.2, 0.6)
+    const bodyGeo = new THREE.BoxGeometry(0.85, 1.25, 0.6)
     const bodyMat = new THREE.MeshStandardMaterial({
       color: 0x06b6d4,
       emissive: 0x083344,
@@ -131,14 +134,12 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
     body.castShadow = true
     playerGroup.add(body)
 
-    // Head with visor
-    const headGeo = new THREE.BoxGeometry(0.5, 0.5, 0.5)
+    const headGeo = new THREE.BoxGeometry(0.55, 0.55, 0.55)
     const headMat = new THREE.MeshStandardMaterial({ color: 0xfbbf24, emissive: 0x78350f })
     const head = new THREE.Mesh(headGeo, headMat)
-    head.position.y = 1.85
+    head.position.y = 1.9
     playerGroup.add(head)
 
-    // Energy Core Aura
     const coreGeo = new THREE.SphereGeometry(0.25, 16, 16)
     const coreMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee })
     const core = new THREE.Mesh(coreGeo, coreMat)
@@ -147,18 +148,18 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
 
     scene.add(playerGroup)
 
-    // Spawning Initial Coins & Obstacles
+    // Spawning Energy Balls & Obstacles
     const coins: THREE.Mesh[] = []
     const obstacles: THREE.Mesh[] = []
-    const lanePositions = [-2, 0, 2]
+    const lanePositions = [-2.2, 0, 2.2]
 
-    for (let z = -20; z >= -350; z -= 12) {
+    // Spawn 28 spaced items along the corridor
+    for (let z = -25; z >= -420; z -= 15) {
       const lane = lanePositions[Math.floor(Math.random() * lanePositions.length)]
-      const isObstacle = Math.random() > 0.45
+      const isObstacle = Math.random() > 0.6 // 40% chance of obstacle, 60% chance of energy ball
 
       if (isObstacle) {
-        // Red spike hazard or stone barrier
-        const obsGeo = new THREE.BoxGeometry(1.4, 1.4, 0.8)
+        const obsGeo = new THREE.BoxGeometry(1.5, 1.4, 0.9)
         const obsMat = new THREE.MeshStandardMaterial({
           color: 0xd97706,
           emissive: 0x7f1d1d,
@@ -170,19 +171,18 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
         scene.add(obs)
         obstacles.push(obs)
       } else {
-        // Glowing ETN coin
-        const coinGeo = new THREE.CylinderGeometry(0.45, 0.45, 0.12, 16)
-        const coinMat = new THREE.MeshStandardMaterial({
+        // Glowing ETN Energy Ball (Sphere)
+        const ballGeo = new THREE.SphereGeometry(0.42, 20, 20)
+        const ballMat = new THREE.MeshStandardMaterial({
           color: 0xfbbf24,
           emissive: 0xd97706,
-          metalness: 0.9,
+          metalness: 0.8,
           roughness: 0.1,
         })
-        const coin = new THREE.Mesh(coinGeo, coinMat)
-        coin.rotation.x = Math.PI / 2
-        coin.position.set(lane, 1.2, z)
-        scene.add(coin)
-        coins.push(coin)
+        const ball = new THREE.Mesh(ballGeo, ballMat)
+        ball.position.set(lane, 1.2, z)
+        scene.add(ball)
+        coins.push(ball)
       }
     }
 
@@ -196,8 +196,7 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
       playerLane: 0,
       isJumping: false,
       jumpVelocity: 0,
-      speed: 0.35,
-      distance: 0,
+      speed: 0.26,
       score: 0,
       health: 3,
       active: true,
@@ -215,8 +214,14 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
       const state = gameStateRef.current
       if (!state.active || !state.player || !state.scene || !state.camera || !state.renderer) return
 
+      // Do not progress game if paused by briefing modal
+      if (isPausedRef.current) {
+        state.renderer.render(state.scene, state.camera)
+        return
+      }
+
       // Smooth lane movement
-      const targetX = state.playerLane * 2
+      const targetX = state.playerLane * 2.2
       state.player.position.x += (targetX - state.player.position.x) * 0.18
       playerLight.position.x = state.player.position.x
 
@@ -230,49 +235,50 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
         }
       }
 
-      // Move coins & obstacles toward player
-      state.coins.forEach((coin) => {
-        coin.position.z += state.speed
-        coin.rotation.z += 0.05 // Spin coin
+      // Move energy balls toward player
+      state.coins.forEach((ball) => {
+        ball.position.z += state.speed
+        ball.rotation.y += 0.04
+        ball.rotation.x += 0.02
 
-        // Coin Collision check
+        // Energy Ball Collision check
         const pPos = state.player!.position
         if (
-          Math.abs(coin.position.z - pPos.z) < 1.0 &&
-          Math.abs(coin.position.x - pPos.x) < 0.9 &&
-          pPos.y < 1.5
+          Math.abs(ball.position.z - pPos.z) < 1.1 &&
+          Math.abs(ball.position.x - pPos.x) < 1.0 &&
+          pPos.y < 1.6
         ) {
-          // Collected coin!
-          coin.position.z = -300 - Math.random() * 50
-          coin.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
-          state.score += 5
+          // Collected 1 Energy Ball
+          ball.position.z = -350 - Math.random() * 50
+          ball.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
+          state.score += 1
           setScore(state.score)
 
-          // Check Victory
+          // Check 20 Balls Victory Condition
           if (state.score >= targetScore) {
             state.active = false
             setVictory(true)
             setTimeout(() => onComplete(), 1500)
           }
-        } else if (coin.position.z > 10) {
-          // Recycle coin ahead
-          coin.position.z = -300 - Math.random() * 50
-          coin.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
+        } else if (ball.position.z > 10) {
+          // Recycle ball ahead
+          ball.position.z = -350 - Math.random() * 50
+          ball.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
         }
       })
 
+      // Move obstacles toward player
       state.obstacles.forEach((obs) => {
         obs.position.z += state.speed
 
         // Obstacle Collision check
         const pPos = state.player!.position
         if (
-          Math.abs(obs.position.z - pPos.z) < 0.9 &&
-          Math.abs(obs.position.x - pPos.x) < 0.8 &&
+          Math.abs(obs.position.z - pPos.z) < 1.0 &&
+          Math.abs(obs.position.x - pPos.x) < 0.9 &&
           pPos.y < 1.0
         ) {
-          // Hit hazard!
-          obs.position.z = -300 - Math.random() * 50
+          obs.position.z = -350 - Math.random() * 50
           state.health -= 1
           setHealth(state.health)
 
@@ -281,8 +287,7 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
             setGameOver(true)
           }
         } else if (obs.position.z > 10) {
-          // Recycle obstacle
-          obs.position.z = -300 - Math.random() * 50
+          obs.position.z = -350 - Math.random() * 50
           obs.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
         }
       })
@@ -305,7 +310,7 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
   // Desktop Controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!gameStateRef.current.active) return
+      if (!gameStateRef.current.active || isPausedRef.current) return
       if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
         gameStateRef.current.playerLane = Math.max(-1, gameStateRef.current.playerLane - 1)
       } else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
@@ -321,17 +326,17 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
 
   // Mobile Touch actions
   const moveLeft = () => {
-    if (!gameStateRef.current.active) return
+    if (!gameStateRef.current.active || isPausedRef.current) return
     gameStateRef.current.playerLane = Math.max(-1, gameStateRef.current.playerLane - 1)
   }
 
   const moveRight = () => {
-    if (!gameStateRef.current.active) return
+    if (!gameStateRef.current.active || isPausedRef.current) return
     gameStateRef.current.playerLane = Math.min(1, gameStateRef.current.playerLane + 1)
   }
 
   const jump = () => {
-    if (!gameStateRef.current.active || gameStateRef.current.isJumping) return
+    if (!gameStateRef.current.active || gameStateRef.current.isJumping || isPausedRef.current) return
     gameStateRef.current.isJumping = true
     gameStateRef.current.jumpVelocity = 0.45
   }
@@ -342,9 +347,9 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
       <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
       {/* Top Game HUD */}
-      <div className="absolute top-4 left-4 right-4 flex justify-between items-center pointer-events-none z-10">
+      <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10 pointer-events-none">
         {/* Health */}
-        <div className="flex items-center gap-1 bg-stone-900/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-red-500/30">
+        <div className="flex items-center gap-1 bg-stone-900/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-red-500/30 pointer-events-auto">
           {[...Array(3)].map((_, i) => (
             <Heart
               key={i}
@@ -353,10 +358,21 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
           ))}
         </div>
 
-        {/* ETN Energy Collected / Goal */}
-        <div className="flex items-center gap-2 bg-stone-900/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-amber-500/30 font-mono font-bold text-glow-amber">
-          <Zap className="w-4 h-4 text-amber-400 fill-amber-400 animate-pulse" />
-          <span>{score} / {targetScore} ETN</span>
+        {/* Action Controls & Energy Balls Goal */}
+        <div className="flex items-center gap-2 pointer-events-auto">
+          <button
+            onClick={() => initGame()}
+            title="Restart Stage"
+            className="flex items-center gap-1 px-3 py-1.5 bg-stone-900/80 hover:bg-stone-800 border border-amber-500/40 text-amber-200 text-xs font-bold rounded-full transition-all cursor-pointer shadow-md"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Restart</span>
+          </button>
+
+          <div className="flex items-center gap-2 bg-stone-900/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-amber-500/40 font-mono font-bold text-glow-amber text-xs md:text-sm">
+            <Zap className="w-4 h-4 text-amber-400 fill-amber-400 animate-pulse" />
+            <span>{score} / {targetScore} Balls (2 ETN)</span>
+          </div>
         </div>
       </div>
 
@@ -386,28 +402,28 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
       </div>
 
       {/* Desktop Key Helper */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-2 text-xs text-white/50 bg-stone-900/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 pointer-events-none">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-2 text-xs text-white/60 bg-stone-900/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/10 pointer-events-none">
         <span>Controls:</span>
         <kbd className="px-2 py-0.5 bg-stone-800 rounded border border-white/20">A / ←</kbd>
         <kbd className="px-2 py-0.5 bg-stone-800 rounded border border-white/20">D / →</kbd>
         <kbd className="px-2 py-0.5 bg-stone-800 rounded border border-white/20">Space (Jump)</kbd>
       </div>
 
-      {/* Game Over Modal */}
+      {/* Game Over / Retry Modal */}
       {gameOver && (
-        <div className="absolute inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-6 z-20 animate-fade-in">
-          <div className="text-6xl mb-3 animate-bounce">💀</div>
-          <h3 className="text-3xl font-bold text-red-400 font-[family-name:var(--font-cinzel-decorative)] mb-2">
-            Temple Trial Failed
+        <div className="absolute inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-6 z-20 animate-fade-in text-center">
+          <div className="text-5xl mb-2 animate-bounce">⚡</div>
+          <h3 className="text-2xl md:text-3xl font-bold text-amber-400 font-[family-name:var(--font-cinzel-decorative)] mb-1">
+            Corridor Run Interrupted
           </h3>
-          <p className="text-white/70 text-sm max-w-xs text-center mb-6">
-            You were struck by ancient hazards before gathering 50 ETN energy.
+          <p className="text-white/70 text-sm max-w-xs mb-6">
+            You collected <strong className="text-amber-300">{score} / {targetScore}</strong> Energy Balls. Gather all 20 to earn 2 ETN and unlock the Quiz!
           </p>
           <button
             onClick={() => initGame()}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-stone-950 font-bold rounded-xl shadow-lg hover:scale-105 transition-transform cursor-pointer"
+            className="flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-black rounded-xl shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer font-[family-name:var(--font-cinzel)] text-base uppercase tracking-wider"
           >
-            <RefreshCw className="w-4 h-4" /> Try Again
+            <RefreshCw className="w-5 h-5" /> Play Again
           </button>
         </div>
       )}
@@ -416,13 +432,13 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
       {victory && (
         <div className="absolute inset-0 bg-emerald-950/90 backdrop-blur-md flex flex-col items-center justify-center p-6 z-20 animate-fade-in text-center">
           <Trophy className="w-16 h-16 text-yellow-400 animate-bounce mb-3" />
-          <h3 className="text-3xl font-black text-white font-[family-name:var(--font-cinzel-decorative)] mb-1">
-            Corridor Conquered!
+          <h3 className="text-2xl md:text-3xl font-black text-white font-[family-name:var(--font-cinzel-decorative)] mb-1">
+            20 Energy Balls Collected!
           </h3>
           <p className="text-emerald-300 text-sm font-semibold mb-4">
-            50 ETN Energy Collected • Temple Portal Activated
+            Stage 1 Mini-game Cleared (+2 ETN Earned) • Temple Portal Active
           </p>
-          <span className="text-xs text-white/60">Opening Quiz Arena...</span>
+          <span className="text-xs text-white/70 animate-pulse">Proceeding to Knowledge Quiz (+3 ETN)...</span>
         </div>
       )}
     </div>

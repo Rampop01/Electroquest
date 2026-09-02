@@ -12,8 +12,8 @@ export const MINIGAME_INSTRUCTIONS: Record<number, GameInstruction> = {
   1: {
     title: "Temple Runner: ETN Gathering",
     subtitle: "Stage 1 Quest • Electroneum Foundations",
-    objective: "Sprint down the ancient corridor, dodge the rotating spike hazards, and collect 30 golden ETN energy coins to open the portal.",
-    reward: "5 ETN + 100 XP + Foundation Rune",
+    objective: "Sprint down the ancient corridor, dodge the rotating spike hazards, and gather 20 golden ETN energy balls to power the portal.",
+    reward: "2 ETN (Game) + 3 ETN (Quiz) = 5 ETN Total + 100 XP + Foundation Rune",
     desktopControls: ["A / D or Left / Right Arrows to switch lanes", "Space to Jump over low obstacles"],
     mobileControls: ["Tap Left / Right arrows to switch lanes", "Tap Jump button to leap over obstacles"],
     proTip: "Timing is everything! Stay in the middle lane when approaching split hazards.",

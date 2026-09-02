@@ -66,10 +66,12 @@ export function StageMiniGame({ questId, questType = "electroneum" }: StageMiniG
   }
 
   // Render stage-specific unique 3D mini-game based on quest ID
+  const isGamePaused = showBriefing || showSkipModal
+
   const renderGame = () => {
     switch (qNum) {
       case 1:
-        return <TempleRunner3D questId={questId} onComplete={handleMiniGameComplete} />
+        return <TempleRunner3D questId={questId} onComplete={handleMiniGameComplete} isPaused={isGamePaused} />
       case 2:
         return <ValidatorDefense3D questId={questId} onComplete={handleMiniGameComplete} />
       case 3:
@@ -109,7 +111,7 @@ export function StageMiniGame({ questId, questType = "electroneum" }: StageMiniG
                 Stage #{questId} {questId === 10 ? 'Boss Arena' : 'Quest Game'}
               </span>
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                <Coins className="w-3 h-3 text-amber-400" /> Reward: 5 ETN
+                <Coins className="w-3 h-3 text-amber-400" /> Reward: 2 ETN (Game) + 3 ETN (Quiz)
               </span>
             </div>
             <h1 className="text-2xl font-black text-white font-[family-name:var(--font-cinzel-decorative)]">
