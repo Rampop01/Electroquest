@@ -205,7 +205,7 @@ export function DungeonMaze3D({ questId, onComplete }: DungeonMaze3DProps) {
       if (!state.active || !state.player || !state.scene || !state.camera || !state.renderer) return
 
       // Handle Player WASD Movement
-      const moveSpeed = 0.18
+      const moveSpeed = 0.16
       const p = state.player.position
 
       if (state.keys["w"] || state.keys["ArrowUp"]) p.z = Math.max(-12, p.z - moveSpeed)
@@ -217,13 +217,13 @@ export function DungeonMaze3D({ questId, onComplete }: DungeonMaze3DProps) {
       state.camera.position.x += (p.x - state.camera.position.x) * 0.08
       state.camera.position.z += (p.z + 12 - state.camera.position.z) * 0.08
 
-      // Rotate Relics & check collection
+      // Rotate Relics & check collection with generous radius
       state.relics.forEach((relic) => {
         if (!relic.collected) {
-          relic.mesh.rotation.y += 0.04
-          relic.mesh.rotation.x += 0.02
+          relic.mesh.rotation.y += 0.03
+          relic.mesh.rotation.x += 0.015
 
-          if (p.distanceTo(relic.mesh.position) < 1.4) {
+          if (p.distanceTo(relic.mesh.position) < 1.8) {
             relic.collected = true
             state.scene!.remove(relic.mesh)
             state.relicsCount += 1
@@ -241,14 +241,14 @@ export function DungeonMaze3D({ questId, onComplete }: DungeonMaze3DProps) {
         }
       })
 
-      // Move Patrol Sentry in circular patrol
+      // Move Patrol Sentry in gentle, relaxed circular patrol
       if (state.guard) {
-        state.guardAngle += 0.02
+        state.guardAngle += 0.011
         state.guard.position.x = Math.cos(state.guardAngle) * 7
         state.guard.position.z = Math.sin(state.guardAngle) * 7
 
         // Check Guard Collision with player
-        if (p.distanceTo(state.guard.position) < 1.4) {
+        if (p.distanceTo(state.guard.position) < 1.3) {
           state.health -= 1
           setHealth(state.health)
           p.set(0, 0, 10) // Respawn player to starting spot

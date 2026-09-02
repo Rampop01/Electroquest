@@ -34,7 +34,7 @@ export function EVMStackCubes3D({ questId, onComplete }: EVMStackCubes3DProps) {
     stack: [] as StackCube[],
     currentBlock: null as THREE.Mesh | null,
     swingAngle: 0,
-    swingSpeed: 0.045,
+    swingSpeed: 0.026,
     stackIndex: 0,
     active: true,
   })

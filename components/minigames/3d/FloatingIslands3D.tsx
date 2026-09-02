@@ -99,11 +99,11 @@ export function FloatingIslands3D({ questId, onComplete }: FloatingIslands3DProp
     // Floating Stone Platforms
     const platforms: Platform[] = []
     const platformData = [
-      { x: 0, y: 0, z: 0, w: 4, d: 4, rune: false },
-      { x: 0, y: 1, z: -6, w: 3, d: 3, rune: true, name: "Consensus Rune" },
-      { x: -3.5, y: 2, z: -12, w: 3, d: 3, rune: true, moveSpeed: 0.03, range: 2.5 },
-      { x: 3.5, y: 3.5, z: -18, w: 3, d: 3, rune: true, moveSpeed: -0.03, range: 2.5 },
-      { x: 0, y: 5, z: -25, w: 4, d: 4, rune: true, name: "Finality Apex" },
+      { x: 0, y: 0, z: 0, w: 4.5, d: 4.5, rune: false },
+      { x: 0, y: 1, z: -6, w: 3.8, d: 3.8, rune: true, name: "Consensus Rune" },
+      { x: -3, y: 2, z: -12, w: 3.6, d: 3.6, rune: true, moveSpeed: 0.015, range: 2.0 },
+      { x: 3, y: 3.5, z: -18, w: 3.6, d: 3.6, rune: true, moveSpeed: -0.015, range: 2.0 },
+      { x: 0, y: 5, z: -25, w: 4.5, d: 4.5, rune: true, name: "Finality Apex" },
     ]
 
     const platMat = new THREE.MeshStandardMaterial({

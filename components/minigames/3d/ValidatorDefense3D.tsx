@@ -15,7 +15,7 @@ export function ValidatorDefense3D({ questId, onComplete }: ValidatorDefense3DPr
   const [shieldHealth, setShieldHealth] = useState(100)
   const [gameOver, setGameOver] = useState(false)
   const [victory, setVictory] = useState(false)
-  const targetKills = 12
+  const targetKills = 10
 
   const gameStateRef = useRef({
     scene: null as THREE.Scene | null,
@@ -45,76 +45,60 @@ export function ValidatorDefense3D({ questId, onComplete }: ValidatorDefense3DPr
     }
 
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x060608)
-    scene.fog = new THREE.FogExp2(0x060608, 0.025)
+    scene.background = new THREE.Color(0x060913)
+    scene.fog = new THREE.FogExp2(0x060913, 0.03)
 
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000)
-    camera.position.set(0, 16, 18)
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
+    camera.position.set(0, 16, 12)
     camera.lookAt(0, 0, 0)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
     renderer.setSize(width, height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    renderer.shadowMap.enabled = true
     container.appendChild(renderer.domElement)
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+    // Ambient & Center lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
     scene.add(ambientLight)
 
-    const coreLight = new THREE.PointLight(0x06b6d4, 3, 30)
-    coreLight.position.set(0, 4, 0)
-    scene.add(coreLight)
+    const centerLight = new THREE.PointLight(0x06b6d4, 2.5, 30)
+    centerLight.position.set(0, 4, 0)
+    scene.add(centerLight)
 
-    // Circular Temple Arena Floor
-    const arenaGeo = new THREE.CircleGeometry(22, 64)
-    const arenaMat = new THREE.MeshStandardMaterial({
-      color: 0x1c1917,
-      roughness: 0.8,
-      metalness: 0.2,
+    // Sanctuary Floor
+    const floorGeo = new THREE.CylinderGeometry(14, 14, 0.8, 48)
+    const floorMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      roughness: 0.7,
+      metalness: 0.3,
     })
-    const arena = new THREE.Mesh(arenaGeo, arenaMat)
-    arena.rotation.x = -Math.PI / 2
-    arena.receiveShadow = true
-    scene.add(arena)
+    const floor = new THREE.Mesh(floorGeo, floorMat)
+    floor.position.y = -0.4
+    scene.add(floor)
 
-    // Outer Glowing Ring Boundary
-    const ringGeo = new THREE.RingGeometry(21.8, 22.2, 64)
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, side: THREE.DoubleSide })
-    const ring = new THREE.Mesh(ringGeo, ringMat)
-    ring.rotation.x = -Math.PI / 2
-    ring.position.y = 0.02
-    scene.add(ring)
-
-    // 5 Central IBFT Validator Crystals
-    const crystalGeo = new THREE.OctahedronGeometry(1.2, 0)
+    // 5 Validator Nodes (Crystals in ring)
+    const crystalGeo = new THREE.OctahedronGeometry(0.7, 0)
     const crystalMat = new THREE.MeshStandardMaterial({
-      color: 0x22d3ee,
-      emissive: 0x0891b2,
+      color: 0x06b6d4,
+      emissive: 0x083344,
       metalness: 0.9,
-      roughness: 0.1,
     })
-
     for (let i = 0; i < 5; i++) {
-      const angle = (i * 72 * Math.PI) / 180
+      const angle = (i / 5) * Math.PI * 2
       const crystal = new THREE.Mesh(crystalGeo, crystalMat)
-      crystal.position.set(Math.cos(angle) * 4, 1.8, Math.sin(angle) * 4)
+      crystal.position.set(Math.cos(angle) * 3, 1, Math.sin(angle) * 3)
       scene.add(crystal)
     }
 
-    // Central Sentry Turret
+    // Central Sentry Gun
     const turretGroup = new THREE.Group()
-    const baseGeo = new THREE.CylinderGeometry(1.5, 2, 1, 16)
-    const baseMat = new THREE.MeshStandardMaterial({ color: 0x292524, metalness: 0.8 })
+    const baseGeo = new THREE.CylinderGeometry(1.2, 1.4, 0.6, 16)
+    const baseMat = new THREE.MeshStandardMaterial({ color: 0x334155 })
     const base = new THREE.Mesh(baseGeo, baseMat)
-    base.position.y = 0.5
     turretGroup.add(base)
 
-    const barrelGeo = new THREE.CylinderGeometry(0.2, 0.3, 3, 12)
-    const barrelMat = new THREE.MeshStandardMaterial({
-      color: 0xfbbf24,
-      emissive: 0x78350f,
-    })
+    const barrelGeo = new THREE.CylinderGeometry(0.2, 0.25, 1.6, 16)
+    const barrelMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0369a1 })
     const barrel = new THREE.Mesh(barrelGeo, barrelMat)
     barrel.rotation.x = Math.PI / 2
     barrel.position.set(0, 1.2, 1.5)
@@ -149,8 +133,8 @@ export function ValidatorDefense3D({ questId, onComplete }: ValidatorDefense3DPr
       const state = gameStateRef.current
       if (!state.active || !state.scene || !state.camera || !state.renderer) return
 
-      // Spawn anomalies every 1.8s
-      if (time - lastSpawn > 1800 && state.enemies.length < 8) {
+      // Spawn anomalies every 2.2s for gentle pacing
+      if (time - lastSpawn > 2200 && state.enemies.length < 6) {
         lastSpawn = time
         const angle = Math.random() * Math.PI * 2
         const spawnRadius = 20
@@ -166,12 +150,12 @@ export function ValidatorDefense3D({ questId, onComplete }: ValidatorDefense3DPr
         state.enemies.push(enemy)
       }
 
-      // Move enemies toward center
+      // Move enemies gently toward center
       state.enemies.forEach((enemy, idx) => {
         const dir = new THREE.Vector3(0, 1.2, 0).sub(enemy.position).normalize()
-        enemy.position.add(dir.multiplyScalar(0.045))
-        enemy.rotation.x += 0.03
-        enemy.rotation.y += 0.04
+        enemy.position.add(dir.multiplyScalar(0.026))
+        enemy.rotation.x += 0.02
+        enemy.rotation.y += 0.03
 
         // Breached shield!
         if (enemy.position.length() < 3.5) {
@@ -187,14 +171,14 @@ export function ValidatorDefense3D({ questId, onComplete }: ValidatorDefense3DPr
         }
       })
 
-      // Move lasers & detect collision
+      // Move lasers & detect collision with generous hitbox
       state.lasers.forEach((laser, lIdx) => {
-        const speed = (laser.userData.dir as THREE.Vector3).clone().multiplyScalar(0.8)
+        const speed = (laser.userData.dir as THREE.Vector3).clone().multiplyScalar(0.85)
         laser.position.add(speed)
 
         // Check collision with any enemy
         state.enemies.forEach((enemy, eIdx) => {
-          if (laser.position.distanceTo(enemy.position) < 1.4) {
+          if (laser.position.distanceTo(enemy.position) < 1.8) {
             // Hit enemy!
             state.scene!.remove(enemy)
             state.scene!.remove(laser)

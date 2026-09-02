@@ -20,7 +20,7 @@ export function EnterpriseShield3D({ questId, onComplete }: EnterpriseShield3DPr
   const [coreHealth, setCoreHealth] = useState(100)
   const [gameOver, setGameOver] = useState(false)
   const [victory, setVictory] = useState(false)
-  const targetDeflect = 12
+  const targetDeflect = 10
 
   const gameStateRef = useRef({
     scene: null as THREE.Scene | null,
@@ -48,11 +48,10 @@ export function EnterpriseShield3D({ questId, onComplete }: EnterpriseShield3DPr
     }
 
     const scene = new THREE.Scene()
-    scene.background = new THREE.Color(0x06060c)
-    scene.fog = new THREE.FogExp2(0x06060c, 0.02)
+    scene.background = new THREE.Color(0x0a0a14)
 
-    const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 1000)
-    camera.position.set(0, 15, 12)
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000)
+    camera.position.set(0, 22, 14)
     camera.lookAt(0, 0, 0)
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
@@ -60,55 +59,39 @@ export function EnterpriseShield3D({ questId, onComplete }: EnterpriseShield3DPr
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     container.appendChild(renderer.domElement)
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
     scene.add(ambientLight)
 
-    const coreLight = new THREE.PointLight(0x06b6d4, 3, 20)
-    coreLight.position.set(0, 2, 0)
-    scene.add(coreLight)
+    const nodeLight = new THREE.PointLight(0x38bdf8, 3, 25)
+    nodeLight.position.set(0, 2, 0)
+    scene.add(nodeLight)
 
-    // Central Core Sphere (Electroneum Network)
-    const coreGeo = new THREE.SphereGeometry(2, 32, 32)
+    // Central Core Node (Cambridge / Oxford Node)
+    const coreGeo = new THREE.IcosahedronGeometry(2.2, 2)
     const coreMat = new THREE.MeshStandardMaterial({
-      color: 0x06b6d4,
-      emissive: 0x083344,
-      metalness: 0.9,
-      roughness: 0.1,
-    })
-    const coreMesh = new THREE.Mesh(coreGeo, coreMat)
-    scene.add(coreMesh)
-
-    // 3 Enterprise Node Satellites orbiting
-    for (let i = 0; i < 3; i++) {
-      const satGeo = new THREE.OctahedronGeometry(0.7, 0)
-      const satMat = new THREE.MeshStandardMaterial({
-        color: 0xfbbf24,
-        emissive: 0x78350f,
-      })
-      const sat = new THREE.Mesh(satGeo, satMat)
-      const ang = (i * 120 * Math.PI) / 180
-      sat.position.set(Math.cos(ang) * 3.5, 0, Math.sin(ang) * 3.5)
-      scene.add(sat)
-    }
-
-    // Player Orbital Shield Arc
-    const shieldGeo = new THREE.CylinderGeometry(5.2, 5.2, 0.8, 32, 1, true, 0, Math.PI * 0.45)
-    const shieldMat = new THREE.MeshStandardMaterial({
       color: 0x38bdf8,
       emissive: 0x0284c7,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.85,
+      metalness: 0.9,
     })
-    const shieldMesh = new THREE.Mesh(shieldGeo, shieldMat)
-    scene.add(shieldMesh)
+    const core = new THREE.Mesh(coreGeo, coreMat)
+    scene.add(core)
+
+    // Orbital Shield Arc
+    const arcGeo = new THREE.RingGeometry(4.8, 5.4, 32, 1, 0, Math.PI * 0.7)
+    const arcMat = new THREE.MeshBasicMaterial({
+      color: 0x22c55e,
+      side: THREE.DoubleSide,
+    })
+    const shieldArc = new THREE.Mesh(arcGeo, arcMat)
+    shieldArc.rotation.x = -Math.PI / 2
+    scene.add(shieldArc)
 
     gameStateRef.current = {
       scene,
       camera,
       renderer,
-      shieldArc: shieldMesh,
+      shieldArc,
       shieldAngle: 0,
       packets: [],
       deflected: 0,
@@ -132,11 +115,11 @@ export function EnterpriseShield3D({ questId, onComplete }: EnterpriseShield3DPr
 
       // Rotate Shield Arc
       if (state.shieldArc) {
-        state.shieldArc.rotation.y = state.shieldAngle
+        state.shieldArc.rotation.z = state.shieldAngle
       }
 
-      // Spawn hostile packet every 1.5s
-      if (time - lastSpawn > 1500 && state.packets.length < 6) {
+      // Spawn hostile packet every 2.2s
+      if (time - lastSpawn > 2200 && state.packets.length < 5) {
         lastSpawn = time
         const angle = Math.random() * Math.PI * 2
         const rad = 16
@@ -148,7 +131,7 @@ export function EnterpriseShield3D({ questId, onComplete }: EnterpriseShield3DPr
         const pMesh = new THREE.Mesh(pGeo, pMat)
         pMesh.position.set(Math.cos(angle) * rad, 0, Math.sin(angle) * rad)
         state.scene.add(pMesh)
-        state.packets.push({ mesh: pMesh, speed: 0.08 })
+        state.packets.push({ mesh: pMesh, speed: 0.045 })
       }
 
       // Update incoming packets
@@ -160,14 +143,14 @@ export function EnterpriseShield3D({ questId, onComplete }: EnterpriseShield3DPr
         const dist = pPos.length()
 
         // Check deflection by shield arc
-        if (dist >= 4.8 && dist <= 5.5) {
+        if (dist >= 4.6 && dist <= 5.6) {
           const packetAngle = Math.atan2(pPos.x, pPos.z)
           // Normalize angles
           let diff = (packetAngle - state.shieldAngle) % (Math.PI * 2)
           if (diff < -Math.PI) diff += Math.PI * 2
           if (diff > Math.PI) diff -= Math.PI * 2
 
-          if (Math.abs(diff) < Math.PI * 0.25) {
+          if (Math.abs(diff) < Math.PI * 0.35) {
             // Deflected!
             state.scene!.remove(pkt.mesh)
             state.packets.splice(idx, 1)

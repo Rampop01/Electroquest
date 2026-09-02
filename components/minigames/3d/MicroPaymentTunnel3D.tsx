@@ -21,7 +21,7 @@ export function MicroPaymentTunnel3D({ questId, onComplete }: MicroPaymentTunnel
   const [health, setHealth] = useState(3)
   const [gameOver, setGameOver] = useState(false)
   const [victory, setVictory] = useState(false)
-  const targetRings = 8
+  const targetRings = 6
 
   const gameStateRef = useRef({
     scene: null as THREE.Scene | null,
@@ -34,7 +34,7 @@ export function MicroPaymentTunnel3D({ questId, onComplete }: MicroPaymentTunnel
     shipY: 0,
     targetX: 0,
     targetY: 0,
-    speed: 0.8,
+    speed: 0.40,
     ringsCount: 0,
     health: 3,
     active: true,
@@ -135,7 +135,7 @@ export function MicroPaymentTunnel3D({ questId, onComplete }: MicroPaymentTunnel
       shipY: 0,
       targetX: 0,
       targetY: 0,
-      speed: 0.85,
+      speed: 0.40,
       ringsCount: 0,
       health: 3,
       active: true,
@@ -169,7 +169,7 @@ export function MicroPaymentTunnel3D({ questId, onComplete }: MicroPaymentTunnel
           const dy = ring.mesh.position.y - state.shipY
           const dz = ring.mesh.position.z
 
-          if (Math.abs(dz) < 1.2 && Math.hypot(dx, dy) < 1.8) {
+          if (Math.abs(dz) < 1.2 && Math.hypot(dx, dy) < 2.2) {
             ring.collected = true
             ;(ring.mesh.material as THREE.MeshStandardMaterial).emissive.setHex(0x10b981)
             state.ringsCount += 1

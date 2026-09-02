@@ -167,17 +167,17 @@ export function AureliusGrandTemple3D({ questId, onComplete }: AureliusGrandTemp
       const state = gameStateRef.current
       if (!state.active || !state.player || !state.scene || !state.camera || !state.renderer) return
 
-      colossus.rotation.y += 0.02
+      colossus.rotation.y += 0.015
 
-      // Spawn expanding shockwave ring every 2.4s
-      if (time - lastShockwave > 2400 && state.shockwaves.length < 4) {
+      // Spawn expanding shockwave ring every 3.5s for strategic timing
+      if (time - lastShockwave > 3500 && state.shockwaves.length < 3) {
         lastShockwave = time
         const sGeo = new THREE.RingGeometry(2.5, 3.2, 32)
         const sMat = new THREE.MeshBasicMaterial({
           color: 0xf59e0b,
           side: THREE.DoubleSide,
           transparent: true,
-          opacity: 0.8,
+          opacity: 0.75,
         })
         const shockwave = new THREE.Mesh(sGeo, sMat)
         shockwave.rotation.x = -Math.PI / 2
@@ -186,16 +186,16 @@ export function AureliusGrandTemple3D({ questId, onComplete }: AureliusGrandTemp
         state.shockwaves.push(shockwave)
       }
 
-      // Expand shockwaves
+      // Expand shockwaves gently
       state.shockwaves.forEach((sw, idx) => {
-        sw.scale.x += 0.05
-        sw.scale.y += 0.05
+        sw.scale.x += 0.028
+        sw.scale.y += 0.028
 
         const radius = sw.scale.x * 2.8
         const pDist = state.player!.position.length()
 
         // Check if shockwave hits grounded player
-        if (Math.abs(pDist - radius) < 0.7 && state.player!.position.y < 0.8) {
+        if (Math.abs(pDist - radius) < 0.6 && state.player!.position.y < 0.8) {
           // Player hit!
           state.health -= 1
           setHealth(state.health)
@@ -216,16 +216,16 @@ export function AureliusGrandTemple3D({ questId, onComplete }: AureliusGrandTemp
 
       // Player Movement
       const p = state.player.position
-      const speed = 0.18
+      const speed = 0.16
       if (state.keys["w"] || state.keys["ArrowUp"]) p.z = Math.max(-16, p.z - speed)
       if (state.keys["s"] || state.keys["ArrowDown"]) p.z = Math.min(16, p.z + speed)
       if (state.keys["a"] || state.keys["ArrowLeft"]) p.x = Math.max(-16, p.x - speed)
       if (state.keys["d"] || state.keys["ArrowRight"]) p.x = Math.min(16, p.x + speed)
 
-      // Jump Physics
+      // Jump Physics (floaty and generous)
       if (state.isJumping) {
         p.y += state.jumpVelocity
-        state.jumpVelocity -= 0.025
+        state.jumpVelocity -= 0.02
         if (p.y <= 0) {
           p.y = 0
           state.isJumping = false
@@ -235,9 +235,9 @@ export function AureliusGrandTemple3D({ questId, onComplete }: AureliusGrandTemp
       // Check Relic Collection
       state.relics.forEach((relic) => {
         if (!relic.collected) {
-          relic.mesh.rotation.y += 0.04
+          relic.mesh.rotation.y += 0.03
 
-          if (p.distanceTo(relic.mesh.position) < 1.6) {
+          if (p.distanceTo(relic.mesh.position) < 2.0) {
             relic.collected = true
             state.scene!.remove(relic.mesh)
             const collectedNow = state.relics.filter((r) => r.collected).length

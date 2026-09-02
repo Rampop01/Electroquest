@@ -15,7 +15,7 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
   const [health, setHealth] = useState(3)
   const [gameOver, setGameOver] = useState(false)
   const [victory, setVictory] = useState(false)
-  const targetScore = 50 // Need 50 ETN energy points to clear the trial
+  const targetScore = 30 // 30 ETN energy points to clear the trial
 
   const gameStateRef = useRef({
     scene: null as THREE.Scene | null,
@@ -27,7 +27,7 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
     playerLane: 0, // -1 (Left), 0 (Center), 1 (Right)
     isJumping: false,
     jumpVelocity: 0,
-    speed: 0.6,
+    speed: 0.35,
     distance: 0,
     score: 0,
     health: 3,
@@ -196,7 +196,7 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
       playerLane: 0,
       isJumping: false,
       jumpVelocity: 0,
-      speed: 0.65,
+      speed: 0.35,
       distance: 0,
       score: 0,
       health: 3,
@@ -223,7 +223,7 @@ export function TempleRunner3D({ questId, onComplete }: TempleRunner3DProps) {
       // Jump Physics
       if (state.isJumping) {
         state.player.position.y += state.jumpVelocity
-        state.jumpVelocity -= 0.035
+        state.jumpVelocity -= 0.022
         if (state.player.position.y <= 0) {
           state.player.position.y = 0
           state.isJumping = false
