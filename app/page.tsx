@@ -24,14 +24,22 @@ export default function LandingPage() {
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-[100dvh] px-6 lg:px-8">
         {/* Logo with glow effect */}
-        <div className="mb-14 text-center animate-float">
-          <h1 className="font-[family-name:var(--font-cinzel-decorative)] text-6xl md:text-8xl lg:text-9xl font-black text-glow-amber text-glow mb-4 tracking-wider">
+        <div className="mb-10 text-center animate-float flex flex-col items-center">
+          <div className="w-28 h-28 md:w-36 md:h-36 mb-4 relative">
+            <div className="absolute inset-0 bg-amber-500/20 blur-2xl rounded-full animate-pulse" />
+            <img 
+              src="/logo.png" 
+              alt="Electroquest Crest" 
+              className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_25px_rgba(245,158,11,0.35)]"
+            />
+          </div>
+          <h1 className="font-[family-name:var(--font-cinzel-decorative)] text-6xl md:text-8xl lg:text-9xl font-black text-glow-amber text-glow mb-2 tracking-wider">
             ELECTRO
           </h1>
           <h2 className="font-[family-name:var(--font-cinzel-decorative)] text-5xl md:text-7xl lg:text-8xl font-black text-glow-cyan text-glow tracking-widest">
             QUEST
           </h2>
-          <div className="mt-8 w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-glow-amber to-transparent animate-shimmer" />
+          <div className="mt-6 w-64 h-1 mx-auto bg-gradient-to-r from-transparent via-glow-amber to-transparent animate-shimmer" />
         </div>
 
         {/* Description */}

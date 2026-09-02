@@ -31,11 +31,11 @@ export function Header() {
         {/* Logo & Brand */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-lg overflow-hidden border border-amber-500/50 shadow-glow-primary group-hover:scale-105 transition-transform duration-300 shrink-0 bg-stone-950">
+            <div className="w-10 h-10 rounded-xl overflow-hidden border border-amber-500/40 bg-stone-900/80 shadow-glow-primary group-hover:scale-105 transition-transform duration-300 shrink-0 flex items-center justify-center p-0.5">
               <img 
-                src="/electroquest-logo.jpg" 
+                src="/logo.png" 
                 alt="Electroquest Logo" 
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain drop-shadow"
               />
             </div>
             <div className="flex flex-col">

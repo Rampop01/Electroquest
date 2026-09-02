@@ -30,21 +30,8 @@ export const metadata: Metadata = {
   description: "Embark on a digital journey to master the Electroneum ecosystem and unlock prosperity.",
   generator: "v0.app",
   icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
+    icon: "/logo.png",
+    apple: "/logo.png",
   },
   other: {
     "talentapp:project_verification": "dfd51781268faf7f47b61393f40de4f9a2d4f567d157f3839bcfae2121a7ff2a6c01c79390c9507cc7b77bdc025d31d945b4b4feec43ffbb02503bdb97f8b7a7",
