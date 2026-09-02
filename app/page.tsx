@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { GameButton } from "@/components/game-button"
-import { MiniPayBadge } from "@/components/minipay-badge"
 import { FogOverlay } from "@/components/fog-overlay"
 import { AnimatedParticles } from "@/components/animated-particles"
 import { ScrollIndicator } from "@/components/scroll-indicator"
@@ -10,7 +9,6 @@ export default function LandingPage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-stone-dark flex flex-col justify-between">
       <LandingSound />
-      <MiniPayBadge />
       
       {/* Animated background with stone texture */}
       <div className="absolute inset-0 opacity-30">

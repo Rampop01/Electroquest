@@ -86,8 +86,9 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
   const handleSubmit = () => {
     setShowResults(true)
     const finalScore = calculateScore()
+    const finalPercentage = Math.round((finalScore / questions.length) * 100)
     setTimeout(() => {
-      playSound(finalScore >= 7 ? "success" : "fail")
+      playSound(finalPercentage >= 70 ? "success" : "fail")
     }, 300)
   }
 
@@ -98,7 +99,8 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
   }
 
   const score = calculateScore()
-  const passed = score >= 7
+  const scorePercentage = Math.round((score / questions.length) * 100)
+  const passed = scorePercentage >= 70
   const allAnswered = answers.every((a) => a !== -1)
 
   const handleRetry = () => {
@@ -118,8 +120,8 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
       await claimProgress({
         questType: questType === "electroneum" ? 1 : 0,
         questId: Number(questId),
-        quizScore: score * 10, // Convert 7/10 to 70%
-        timeTaken: 120, // Hardcoded time for now
+        quizScore: scorePercentage, // True 0-100% score for smart contract
+        timeTaken: Math.max(10, elapsedTime), // Actual seconds taken
         xp: 100, // Base XP reward
       });
     } catch (err) {
@@ -131,8 +133,9 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
   useEffect(() => {
     if (showResults) {
       const finalScore = calculateScore()
+      const finalPercentage = Math.round((finalScore / questions.length) * 100)
       setTimeout(() => {
-        playSound(finalScore >= 7 ? 'success' : 'fail')
+        playSound(finalPercentage >= 70 ? 'success' : 'fail')
       }, 300)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -219,9 +222,12 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
               </p>
               <p 
                 style={{ fontFamily: 'var(--font-cinzel-decorative)' }}
-                className="text-6xl font-black text-glow-amber"
+                className="text-5xl md:text-6xl font-black text-glow-amber"
               >
-                {score}/10
+                {score} / {questions.length}
+              </p>
+              <p className="text-sm font-bold text-glow-cyan mt-1">
+                {scorePercentage}% Performance
               </p>
             </div>
 

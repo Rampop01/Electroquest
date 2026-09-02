@@ -1,9 +1,5 @@
-/**
- * @file scroll-reader.tsx
- * @description Core implementation module for Electroquest.
- */
 'use client'
-import { Play, Pause, Square, BookOpen } from 'lucide-react'
+import { Play, Pause, Square, BookOpen, Volume2 } from 'lucide-react'
 import { useTextToSpeech } from '@/hooks/useTextToSpeech'
 import { useEffect, useState } from 'react'
 import { GameTooltip } from './game-tooltip'
@@ -15,7 +11,18 @@ interface ScrollReaderProps {
 }
 
 export function ScrollReader({ title, content, analogy }: ScrollReaderProps) {
-  const { speak, pause, resume, stop, isSpeaking, isPaused, isSupported } = useTextToSpeech()
+  const {
+    speak,
+    pause,
+    resume,
+    stop,
+    isSpeaking,
+    isPaused,
+    isSupported,
+    voices,
+    selectedVoice,
+    setSelectedVoice,
+  } = useTextToSpeech()
 
   if (!isSupported) return null
 
@@ -61,11 +68,39 @@ export function ScrollReader({ title, content, analogy }: ScrollReaderProps) {
         />
       </div>
 
-      <div className="flex items-center gap-3 p-3 bg-stone-900/80 border border-glow-amber/30 backdrop-blur-sm [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)]">
+      <div className="flex flex-wrap items-center gap-3 p-3 bg-stone-900/80 border border-glow-amber/30 backdrop-blur-sm [clip-path:polygon(12px_0,100%_0,100%_calc(100%-12px),calc(100%-12px)_100%,0_100%,0_12px)]">
         <BookOpen className="w-4 h-4 text-glow-amber flex-shrink-0" />
-        <span className="text-xs font-[family-name:var(--font-cinzel)] text-glow-amber uppercase tracking-wider flex-1">
-          {isSpeaking ? (isPaused ? 'Paused' : 'Reading aloud...') : 'Read this scroll aloud'}
+        <span className="text-xs font-[family-name:var(--font-cinzel)] text-glow-amber uppercase tracking-wider flex-1 min-w-[140px]">
+          {isSpeaking ? (isPaused ? 'Paused' : 'Reading aloud...') : 'Read aloud'}
         </span>
+
+        {/* Voice Picker Dropdown */}
+        {voices.length > 0 && (
+          <div className="flex items-center gap-1.5 bg-stone-950/80 px-2 py-1 rounded-md border border-glow-amber/30">
+            <Volume2 className="w-3.5 h-3.5 text-glow-amber/80 flex-shrink-0" />
+            <select
+              value={selectedVoice}
+              onChange={(e) => {
+                setSelectedVoice(e.target.value)
+                if (isSpeaking) {
+                  stop()
+                }
+              }}
+              className="bg-transparent text-[11px] font-[family-name:var(--font-cinzel)] text-amber-200 outline-none cursor-pointer max-w-[120px] md:max-w-[180px] truncate"
+              title="Select Narrator Voice"
+            >
+              {voices
+                .filter((v) => v.lang.startsWith('en') || voices.length < 10)
+                .map((v) => (
+                  <option key={v.name} value={v.name} className="bg-stone-900 text-amber-200">
+                    {v.name.replace(/Google|Microsoft|Apple|Desktop|Natural/gi, '').trim() || v.name} ({v.lang})
+                  </option>
+                ))}
+            </select>
+          </div>
+        )}
+
+        {/* Controls */}
         <div className="flex gap-2">
           {!isSpeaking && (
             <GameTooltip text="Read Aloud" position="top">

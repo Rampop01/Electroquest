@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { privateKeyToAccount } from 'viem/accounts';
-import { CONTRACT_ADDRESSES } from '@/constants/contracts';
+import { CONTRACT_ADDRESSES, ELECTRONEUM_NETWORK } from '@/constants/contracts';
 
 export async function POST(request: Request) {
   try {
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
       domain: {
         name: 'QuestEthGame',
         version: '1',
-        chainId: 42220, // Celo Mainnet
+        chainId: ELECTRONEUM_NETWORK.id,
         verifyingContract: CONTRACT_ADDRESSES.ELECTRONEUM.GAME_CORE as `0x${string}`,
       },
       types: {

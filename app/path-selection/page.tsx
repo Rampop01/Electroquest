@@ -59,26 +59,26 @@ export default function PathSelectionPage() {
               </Link>
             </div>
 
-            {/* Celo Path - For Advanced Users */}
+            {/* Electroneum Path */}
             <div className="relative group bg-stone-900/70 border border-cyan-500/30 rounded-xl p-8 backdrop-blur-sm hover:bg-stone-900/90 transition-all duration-300 hover:shadow-glow-cyan">
               <div className="mb-6">
-                <h3 className="font-[family-name:var(--font-cinzel)] text-2xl font-bold text-glow-cyan mb-4 tracking-wider">Electroneum Adventurer</h3>
+                <h3 className="font-[family-name:var(--font-cinzel)] text-2xl font-bold text-glow-cyan mb-4 tracking-wider">Electroneum Master</h3>
                 <p className="font-[family-name:var(--font-cinzel)] text-foreground/80 mb-6">
-                  Ready for the real deal? Dive into Electroneum's mobile-first ecosystem, integrations, 
-                  and real-world impact projects.
+                  Dive into the Electroneum Smart Chain (Aurelius). Master IBFT 2.0 consensus, ultra-low gas micro-transactions, 
+                  enterprise validators, and the AnyTask global ecosystem.
                 </p>
                 <ul className="space-y-2 mb-8">
                   <li className="flex items-center text-foreground/90">
                     <ArrowRight className="w-4 h-4 mr-2 text-cyan-400" />
-                    Mobile-first design
+                    IBFT 2.0 & 5s Fast Finality
                   </li>
                   <li className="flex items-center text-foreground/90">
                     <ArrowRight className="w-4 h-4 mr-2 text-cyan-400" />
-                    Explore MiniPay integration
+                    Zero-fee AnyTask & Real-World Utility
                   </li>
                   <li className="flex items-center text-foreground/90">
                     <ArrowRight className="w-4 h-4 mr-2 text-cyan-400" />
-                    Advanced concepts and tools
+                    Interactive Validator & EVM Puzzles
                   </li>
                 </ul>
               </div>

@@ -1,5 +1,5 @@
-import QuestRoom from "@/components/quest-room"
-import { electroQuestRooms } from "@/lib/electro-quest-data"
+import { StageMiniGame } from "@/components/minigames/StageMiniGame"
+import { electroScrollContent } from "@/lib/electro-quest-data"
 import { notFound } from "next/navigation"
 
 interface ElectroquestRoomPageProps {
@@ -8,15 +8,15 @@ interface ElectroquestRoomPageProps {
 
 export default async function ElectroquestRoomPage({ params }: ElectroquestRoomPageProps) {
   const { id } = await params
-  const questData = electroQuestRooms[id as keyof typeof electroQuestRooms]
+  const questData = electroScrollContent[id]
 
   if (!questData) {
     notFound()
   }
 
-  return <QuestRoom questId={id} questType="celo" />
+  return <StageMiniGame questId={id} questType="electroneum" />
 }
 
 export async function generateStaticParams() {
-  return Object.keys(electroQuestRooms).map((id) => ({ id }))
+  return Object.keys(electroScrollContent).map((id) => ({ id }))
 }

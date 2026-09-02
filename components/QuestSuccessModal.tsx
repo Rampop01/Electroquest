@@ -59,9 +59,16 @@ export function QuestSuccessModal({ isOpen, questTitle, xpEarned, onNext }: Ques
               <GameButton onClick={onNext} className="w-full py-4 text-lg">
                 CONTINUE JOURNEY <ArrowRight className="ml-2 w-5 h-5" />
               </GameButton>
-              <button className="text-white/40 hover:text-white text-xs font-bold transition-colors">
-                SHARE ACHIEVEMENT
-              </button>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                  `I just conquered ${questTitle} on @electroquest_ built on @electroneum\n\nEarned +${xpEarned} XP on-chain.\n\nPlay: https://electroquest.app @afr_electroneum #Electroneum #ETN #afr_electroneum #Web3Gaming`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block text-glow-cyan hover:text-white text-xs font-bold transition-colors cursor-pointer"
+              >
+                SHARE ACHIEVEMENT ON 𝕏
+              </a>
             </div>
 
             {/* Sparkle effects */}

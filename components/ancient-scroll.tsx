@@ -69,21 +69,10 @@ export function AncientScroll({ title, content, analogy, nextUrl }: AncientScrol
 
           {/* Title */}
           <h2 
-            className="text-4xl md:text-5xl font-black text-center mb-8 text-[#58493b] tracking-wide flex justify-center flex-wrap"
+            className="text-4xl md:text-5xl font-black text-center mb-8 text-[#58493b] tracking-wide"
             style={{ fontFamily: 'var(--font-cinzel-decorative)' }}
           >
-            {title.split('').map((char, index) => (
-              <span
-                key={index}
-                className="opacity-0 animate-fade-in"
-                style={{
-                  animationDelay: `${index * 0.05}s`,
-                  animationFillMode: 'forwards'
-                }}
-              >
-                {char === ' ' ? '\u00A0' : char}
-              </span>
-            ))}
+            {title}
           </h2>
 
           {/* Decorative separator */}

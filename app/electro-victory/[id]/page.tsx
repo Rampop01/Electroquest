@@ -54,7 +54,7 @@ export default async function ElectroVictoryPage({ params }: ElectroVictoryPageP
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           {hasNextQuest ? (
             <Link href={`/electro-quests/${nextQuestId}`}>
               <GameButton size="lg" className="text-xl px-10 py-5">
@@ -68,6 +68,17 @@ export default async function ElectroVictoryPage({ params }: ElectroVictoryPageP
               </GameButton>
             </Link>
           )}
+
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+              `I just conquered Stage #${id} on @electroquest_ built on @electroneum\n\nEarned on-chain XP & Ancient Rune #${id} on the Aurelius Smart Chain.\n\nPlay now: https://electroquest.app @afr_electroneum #Electroneum #ETN #afr_electroneum #Web3Gaming`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-8 py-5 bg-stone-900/90 border border-glow-cyan/50 hover:border-glow-cyan text-glow-cyan rounded-xl font-bold font-[family-name:var(--font-cinzel)] hover:scale-105 transition-all text-base shadow-lg"
+          >
+            <span>Share on 𝕏</span>
+          </a>
         </div>
       </div>
     </div>
