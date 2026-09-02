@@ -54,7 +54,6 @@ class RunnerAudioEngine {
     if (!ctx) return
     const now = ctx.currentTime
 
-    // 2-tone melodic high sparkle
     const osc1 = ctx.createOscillator()
     const osc2 = ctx.createOscillator()
     const gain = ctx.createGain()
@@ -161,7 +160,7 @@ class RunnerAudioEngine {
     if (!ctx) return
     const now = ctx.currentTime
 
-    const notes = [523.25, 659.25, 783.99, 1046.5] // C5, E5, G5, C6
+    const notes = [523.25, 659.25, 783.99, 1046.5]
     notes.forEach((freq, idx) => {
       const osc = ctx.createOscillator()
       const gain = ctx.createGain()
@@ -187,15 +186,13 @@ class RunnerAudioEngine {
     const ctx = this.getContext()
     if (!ctx) return
 
-    // 135 BPM = ~111ms per sixteenth note
-    const bassline = [110, 110, 146.83, 110, 130.81, 146.83, 164.81, 130.81] // A2, D3, C3, E3
+    const bassline = [110, 110, 146.83, 110, 130.81, 146.83, 164.81, 130.81]
     this.bgmStep = 0
 
     this.bgmInterval = setInterval(() => {
       if (this.isMuted) return
       const now = ctx.currentTime
 
-      // 1. Synth Bass note
       const freq = bassline[this.bgmStep % bassline.length]
       const osc = ctx.createOscillator()
       const gain = ctx.createGain()
@@ -212,7 +209,6 @@ class RunnerAudioEngine {
       osc.start(now)
       osc.stop(now + 0.15)
 
-      // 2. Marimba high chime on upbeat
       if (this.bgmStep % 2 === 1) {
         const chime = ctx.createOscillator()
         const chimeGain = ctx.createGain()
@@ -291,6 +287,8 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       rightArm: null as THREE.Group | null,
       leftLeg: null as THREE.Group | null,
       rightLeg: null as THREE.Group | null,
+      leftKnee: null as THREE.Group | null,
+      rightKnee: null as THREE.Group | null,
       body: null as THREE.Group | null,
       cape: null as THREE.Mesh | null,
     },
@@ -299,17 +297,17 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     coins: [] as THREE.Mesh[],
     obstacles: [] as THREE.Mesh[],
     speedParticles: [] as THREE.Mesh[],
-    playerLane: 0, // -1 (Left), 0 (Center), 1 (Right)
+    playerLane: 0,
     isJumping: false,
     jumpVelocity: 0,
     runCycle: 0,
-    speed: 0.44, // Enhanced fast subway runner speed!
+    speed: 0.45,
     score: 0,
     health: 3,
     active: true,
   })
 
-  // Build high-detail humanoid runner
+  // Build high-detail articulated athletic sprinter
   const createHumanoidCharacter = () => {
     const playerGroup = new THREE.Group()
     const bodyContainer = new THREE.Group()
@@ -321,7 +319,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       metalness: 0.1,
     })
     const armorMat = new THREE.MeshStandardMaterial({
-      color: 0x0f172a,
+      color: 0x0f172a, // dark obsidian titanium
       roughness: 0.3,
       metalness: 0.8,
     })
@@ -333,14 +331,14 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     })
     const energyCyanMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 })
 
-    // 1. Torso & Chest Armor
-    const chestGeo = new THREE.BoxGeometry(0.7, 0.75, 0.45)
+    // 1. Torso & Chest Armor (Athletic V-Taper)
+    const chestGeo = new THREE.BoxGeometry(0.72, 0.75, 0.45)
     const chest = new THREE.Mesh(chestGeo, armorMat)
     chest.position.y = 1.35
     chest.castShadow = true
     bodyContainer.add(chest)
 
-    const crestGeo = new THREE.BoxGeometry(0.4, 0.4, 0.08)
+    const crestGeo = new THREE.BoxGeometry(0.42, 0.42, 0.08)
     const crest = new THREE.Mesh(crestGeo, goldMat)
     crest.position.set(0, 1.38, 0.23)
     bodyContainer.add(crest)
@@ -350,12 +348,12 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     core.position.set(0, 1.38, 0.28)
     bodyContainer.add(core)
 
-    const waistGeo = new THREE.BoxGeometry(0.58, 0.3, 0.4)
+    const waistGeo = new THREE.BoxGeometry(0.56, 0.3, 0.38)
     const waist = new THREE.Mesh(waistGeo, goldMat)
     waist.position.y = 0.92
     bodyContainer.add(waist)
 
-    // 2. Head & Helmet
+    // 2. Head & Helmet (Focused forward glance)
     const headGroup = new THREE.Group()
     headGroup.position.set(0, 1.9, 0)
 
@@ -380,83 +378,106 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
     bodyContainer.add(headGroup)
 
-    // 3. Shoulders & Arms
+    // 3. Sprinter Arms (Pumped at 90-degree elbows)
+    // Left Arm
     const leftArmPivot = new THREE.Group()
     leftArmPivot.position.set(-0.48, 1.6, 0)
 
     const shoulderPadL = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), goldMat)
     leftArmPivot.add(shoulderPadL)
 
-    const armUpperL = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.4, 8), armorMat)
-    armUpperL.position.set(0, -0.22, 0)
+    const armUpperL = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.38, 8), armorMat)
+    armUpperL.position.set(0, -0.19, 0)
     leftArmPivot.add(armUpperL)
 
-    const armLowerL = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.35, 8), skinMat)
-    armLowerL.position.set(0, -0.55, 0.08)
-    armLowerL.rotation.x = -0.4
-    leftArmPivot.add(armLowerL)
+    // Forearm bent 85 degrees forward for sprinter pump
+    const forearmL = new THREE.Group()
+    forearmL.position.set(0, -0.38, 0)
+    forearmL.rotation.x = -1.4 // Bent elbow
+
+    const armLowerL = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.36, 8), skinMat)
+    armLowerL.position.set(0, -0.18, 0)
+    forearmL.add(armLowerL)
 
     const fistL = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.14, 0.14), goldMat)
-    fistL.position.set(0, -0.72, 0.18)
-    leftArmPivot.add(fistL)
+    fistL.position.set(0, -0.36, 0)
+    forearmL.add(fistL)
 
+    leftArmPivot.add(forearmL)
     bodyContainer.add(leftArmPivot)
 
+    // Right Arm
     const rightArmPivot = new THREE.Group()
     rightArmPivot.position.set(0.48, 1.6, 0)
 
     const shoulderPadR = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), goldMat)
     rightArmPivot.add(shoulderPadR)
 
-    const armUpperR = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.4, 8), armorMat)
-    armUpperR.position.set(0, -0.22, 0)
+    const armUpperR = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.38, 8), armorMat)
+    armUpperR.position.set(0, -0.19, 0)
     rightArmPivot.add(armUpperR)
 
-    const armLowerR = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.35, 8), skinMat)
-    armLowerR.position.set(0, -0.55, 0.08)
-    armLowerR.rotation.x = -0.4
-    rightArmPivot.add(armLowerR)
+    const forearmR = new THREE.Group()
+    forearmR.position.set(0, -0.38, 0)
+    forearmR.rotation.x = -1.4 // Bent elbow
+
+    const armLowerR = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.08, 0.36, 8), skinMat)
+    armLowerR.position.set(0, -0.18, 0)
+    forearmR.add(armLowerR)
 
     const fistR = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.14, 0.14), goldMat)
-    fistR.position.set(0, -0.72, 0.18)
-    rightArmPivot.add(fistR)
+    fistR.position.set(0, -0.36, 0)
+    forearmR.add(fistR)
 
+    rightArmPivot.add(forearmR)
     bodyContainer.add(rightArmPivot)
 
-    // 4. Hips & Legs
-    const leftLegPivot = new THREE.Group()
-    leftLegPivot.position.set(-0.2, 0.8, 0)
+    // 4. Sprinter Legs with Articulated Knee Joints
+    // Left Leg (Hip Pivot)
+    const leftHipPivot = new THREE.Group()
+    leftHipPivot.position.set(-0.22, 0.82, 0)
 
-    const thighL = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.11, 0.45, 8), armorMat)
-    thighL.position.set(0, -0.22, 0)
-    leftLegPivot.add(thighL)
+    const thighL = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.11, 0.42, 8), armorMat)
+    thighL.position.set(0, -0.21, 0)
+    leftHipPivot.add(thighL)
 
-    const calfL = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.09, 0.42, 8), skinMat)
-    calfL.position.set(0, -0.58, 0.02)
-    leftLegPivot.add(calfL)
+    // Left Knee Pivot
+    const leftKneePivot = new THREE.Group()
+    leftKneePivot.position.set(0, -0.42, 0)
 
-    const bootL = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.18, 0.32), goldMat)
-    bootL.position.set(0, -0.82, 0.08)
-    leftLegPivot.add(bootL)
+    const calfL = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.09, 0.4, 8), skinMat)
+    calfL.position.set(0, -0.2, 0)
+    leftKneePivot.add(calfL)
 
-    bodyContainer.add(leftLegPivot)
+    const bootL = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.16, 0.32), goldMat)
+    bootL.position.set(0, -0.4, 0.06)
+    leftKneePivot.add(bootL)
 
-    const rightLegPivot = new THREE.Group()
-    rightLegPivot.position.set(0.2, 0.8, 0)
+    leftHipPivot.add(leftKneePivot)
+    bodyContainer.add(leftHipPivot)
 
-    const thighR = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.11, 0.45, 8), armorMat)
-    thighR.position.set(0, -0.22, 0)
-    rightLegPivot.add(thighR)
+    // Right Leg (Hip Pivot)
+    const rightHipPivot = new THREE.Group()
+    rightHipPivot.position.set(0.22, 0.82, 0)
 
-    const calfR = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.09, 0.42, 8), skinMat)
-    calfR.position.set(0, -0.58, 0.02)
-    rightLegPivot.add(calfR)
+    const thighR = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.11, 0.42, 8), armorMat)
+    thighR.position.set(0, -0.21, 0)
+    rightHipPivot.add(thighR)
 
-    const bootR = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.18, 0.32), goldMat)
-    bootR.position.set(0, -0.82, 0.08)
-    rightLegPivot.add(bootR)
+    // Right Knee Pivot
+    const rightKneePivot = new THREE.Group()
+    rightKneePivot.position.set(0, -0.42, 0)
 
-    bodyContainer.add(rightLegPivot)
+    const calfR = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.09, 0.4, 8), skinMat)
+    calfR.position.set(0, -0.2, 0)
+    rightKneePivot.add(calfR)
+
+    const bootR = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.16, 0.32), goldMat)
+    bootR.position.set(0, -0.4, 0.06)
+    rightKneePivot.add(bootR)
+
+    rightHipPivot.add(rightKneePivot)
+    bodyContainer.add(rightHipPivot)
 
     // 5. Flowing Hero Cape
     const capeGeo = new THREE.PlaneGeometry(0.65, 1.1, 4, 4)
@@ -467,18 +488,21 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     })
     const cape = new THREE.Mesh(capeGeo, capeMat)
     cape.position.set(0, 1.15, -0.25)
-    cape.rotation.x = 0.35
+    cape.rotation.x = 0.4
     bodyContainer.add(cape)
 
-    bodyContainer.rotation.x = 0.16
+    // Athletic Sprinter Forward Posture (No lateral catwalk sway)
+    bodyContainer.rotation.x = 0.28
 
     return {
       playerGroup,
       limbs: {
         leftArm: leftArmPivot,
         rightArm: rightArmPivot,
-        leftLeg: leftLegPivot,
-        rightLeg: rightLegPivot,
+        leftLeg: leftHipPivot,
+        rightLeg: rightHipPivot,
+        leftKnee: leftKneePivot,
+        rightKnee: rightKneePivot,
         body: bodyContainer,
         cape,
       },
@@ -492,7 +516,6 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     const width = container.clientWidth
     const height = container.clientHeight
 
-    // Cleanup previous instance if any
     if (gameStateRef.current.renderer) {
       if (container.contains(gameStateRef.current.renderer.domElement)) {
         container.removeChild(gameStateRef.current.renderer.domElement)
@@ -527,7 +550,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     playerLight.position.set(0, 2, 0)
     scene.add(playerLight)
 
-    // Floor Runway segments for true continuous scrolling
+    // Floor Runway segments
     const floorSegments: THREE.Mesh[] = []
     const floorMat = new THREE.MeshStandardMaterial({
       color: 0x1c1917,
@@ -556,7 +579,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       floorSegments.push(segGroup as any)
     }
 
-    // Dynamic Scrolling Temple Pillars & Torches
+    // Scrolling Temple Pillars & Torches
     const pillars: THREE.Group[] = []
     const pillarMat = new THREE.MeshStandardMaterial({ color: 0x292524 })
 
@@ -578,7 +601,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       pillars.push(pGroup)
     }
 
-    // Speed Lines / Dust Particles rushing past the runner
+    // Speed Lines / Dust Particles
     const speedParticles: THREE.Mesh[] = []
     const partMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee })
     for (let i = 0; i < 70; i++) {
@@ -592,7 +615,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       speedParticles.push(part)
     }
 
-    // Create Detailed Animated Humanoid Hero
+    // Create Sprinter Hero
     const { playerGroup, limbs } = createHumanoidCharacter()
     scene.add(playerGroup)
 
@@ -684,7 +707,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       isJumping: false,
       jumpVelocity: 0,
       runCycle: 0,
-      speed: 0.44, // Fast subway surf speed!
+      speed: 0.45,
       score: 0,
       health: 3,
       active: true,
@@ -696,7 +719,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     setVictory(false)
     setUserPaused(false)
 
-    if (!effectivePaused) {
+    if (!effectivePaused && soundEnabled) {
       audioRef.current?.startBgm()
     }
 
@@ -707,16 +730,15 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       const state = gameStateRef.current
       if (!state.active || !state.player || !state.scene || !state.camera || !state.renderer) return
 
-      // Freeze when paused
       if (isPausedRef.current) {
         state.renderer.render(state.scene, state.camera)
         return
       }
 
-      // Progress Running Cycle
-      state.runCycle += state.speed * 0.85
+      // Fast Sprinter Cadence
+      state.runCycle += state.speed * 1.55
 
-      // 1. DYNAMIC HALLWAY SCROLLING
+      // 1. Dynamic Hallway Scrolling
       state.pillars.forEach((pGroup) => {
         pGroup.position.z += state.speed
         if (pGroup.position.z > 20) {
@@ -724,7 +746,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         }
       })
 
-      // 2. DYNAMIC FLOOR SCROLLING
+      // 2. Dynamic Floor Scrolling
       state.floorSegments.forEach((fGroup: any) => {
         fGroup.position.z += state.speed
         if (fGroup.position.z > 20) {
@@ -732,42 +754,58 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         }
       })
 
-      // 3. SPEED PARTICLES
+      // 3. Speed Particles
       state.speedParticles.forEach((part) => {
-        part.position.z += state.speed * 2.4
+        part.position.z += state.speed * 2.5
         if (part.position.z > 10) {
           part.position.z = -300 - Math.random() * 50
           part.position.x = (Math.random() - 0.5) * 10
         }
       })
 
-      // 4. Animate Humanoid Running Limbs & Fluttering Cape
-      if (state.limbs.leftArm && state.limbs.rightArm && state.limbs.leftLeg && state.limbs.rightLeg && state.limbs.body && state.limbs.cape) {
+      // 4. Athletic Sprinter Limbs Animation (NO Catwalk, High Knee Flexion & Pumping Arms!)
+      const { limbs } = state
+      if (limbs.leftArm && limbs.rightArm && limbs.leftLeg && limbs.rightLeg && limbs.leftKnee && limbs.rightKnee && limbs.body && limbs.cape) {
         if (state.isJumping) {
-          state.limbs.leftLeg.rotation.x = -0.5
-          state.limbs.rightLeg.rotation.x = -0.3
-          state.limbs.leftArm.rotation.x = 0.6
-          state.limbs.rightArm.rotation.x = 0.6
-          state.limbs.body.position.y = 0
-          state.limbs.cape.rotation.x = 0.55
+          // Jump pose: both knees tucked, arms raised forward
+          limbs.leftLeg.rotation.x = -0.6
+          limbs.leftKnee.rotation.x = 1.1
+          limbs.rightLeg.rotation.x = -0.4
+          limbs.rightKnee.rotation.x = 0.8
+          limbs.leftArm.rotation.x = 0.7
+          limbs.rightArm.rotation.x = 0.7
+          limbs.body.position.y = 0
+          limbs.body.rotation.z = 0
+          limbs.cape.rotation.x = 0.65
         } else {
-          const swing = Math.sin(state.runCycle)
-          state.limbs.leftArm.rotation.x = swing * 1.05
-          state.limbs.rightArm.rotation.x = -swing * 1.05
-          state.limbs.leftLeg.rotation.x = -swing * 1.2
-          state.limbs.rightLeg.rotation.x = swing * 1.2
+          const sin = Math.sin(state.runCycle)
+          const cos = Math.cos(state.runCycle)
 
-          // Dynamic vertical bounce & torso bobbing
-          state.limbs.body.position.y = Math.abs(Math.sin(state.runCycle * 2)) * 0.14
-          state.limbs.body.rotation.z = Math.sin(state.runCycle) * 0.05
-          // Cape flutter
-          state.limbs.cape.rotation.x = 0.4 + Math.sin(state.runCycle * 3.5) * 0.2
+          // Sprinter Pumping Arms (elbows forward and backward, no side flailing)
+          limbs.leftArm.rotation.x = -sin * 1.2
+          limbs.rightArm.rotation.x = sin * 1.2
+
+          // Sprinter Thighs (High forward knee drive and backward ground push)
+          limbs.leftLeg.rotation.x = sin * 1.15
+          limbs.rightLeg.rotation.x = -sin * 1.15
+
+          // Articulated Knees (Heel kicks up backward when thigh swings forward/back)
+          limbs.leftKnee.rotation.x = Math.max(0, -sin * 1.4 + 0.2)
+          limbs.rightKnee.rotation.x = Math.max(0, sin * 1.4 + 0.2)
+
+          // Sprinter vertical step bounce (NO lateral hip sway)
+          limbs.body.position.y = Math.abs(cos) * 0.16
+          limbs.body.rotation.z = 0 // Locked straight, zero catwalk!
+          limbs.body.rotation.x = 0.28 // Athletic forward sprint lean
+
+          // Fluttering Cape
+          limbs.cape.rotation.x = 0.45 + Math.sin(state.runCycle * 3.5) * 0.22
         }
       }
 
-      // Snappy lane movement (0.26 factor)
+      // Snappy lane movement
       const targetX = state.playerLane * 2.2
-      state.player.position.x += (targetX - state.player.position.x) * 0.26
+      state.player.position.x += (targetX - state.player.position.x) * 0.28
       playerLight.position.x = state.player.position.x
 
       // Jump Physics
@@ -786,7 +824,6 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         ball.rotation.y += 0.05
         ball.rotation.x += 0.03
 
-        // Energy Ball Collision check
         const pPos = state.player!.position
         if (
           Math.abs(ball.position.z - pPos.z) < 1.15 &&
@@ -916,13 +953,6 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
   const togglePause = () => {
     setUserPaused((prev) => !prev)
-  }
-
-  const toggleSound = () => {
-    if (audioRef.current) {
-      const muted = audioRef.current.toggleMute()
-      setIsMuted(muted)
-    }
   }
 
   return (
