@@ -61,13 +61,15 @@ export function DailyStreakModal({ isOpen, onClose }: DailyStreakModalProps) {
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-6">
           <div className="relative mb-3">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-orange-500 to-amber-300 p-0.5 shadow-glow-secondary animate-float">
-              <div className="w-full h-full bg-stone-900 rounded-[14px] flex items-center justify-center">
-                <Flame className="w-9 h-9 text-amber-400 fill-amber-400 animate-pulse" />
-              </div>
+            <div className="w-20 h-20 rounded-2xl p-1.5 bg-stone-900/90 border border-amber-500/50 shadow-glow-secondary animate-float flex items-center justify-center">
+              <img 
+                src="/logo.png" 
+                alt="Electroquest Logo" 
+                className="w-full h-full object-contain drop-shadow-[0_0_12px_rgba(245,158,11,0.5)]"
+              />
             </div>
             {currentStreak > 0 && (
-              <span className="absolute -bottom-1 -right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-stone-950 font-black text-xs px-2 py-0.5 rounded-full shadow-md font-mono">
+              <span className="absolute -bottom-1 -right-2 bg-gradient-to-r from-amber-500 to-orange-500 text-stone-950 font-black text-xs px-2 py-0.5 rounded-full shadow-md font-mono border border-stone-950">
                 {currentStreak}d
               </span>
             )}
