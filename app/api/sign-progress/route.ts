@@ -10,7 +10,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { user, questType, questId, quizScore, timeTaken, xp } = body;
+    const { user, questType, questId, quizScore, timeTaken, xp, chainId } = body;
 
     if (!user || questType === undefined || questId === undefined || quizScore === undefined || timeTaken === undefined || xp === undefined) {
       return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
@@ -20,6 +20,7 @@ export async function POST(request: Request) {
       MASTER_PRIVATE_KEY.startsWith('0x') ? (MASTER_PRIVATE_KEY as `0x${string}`) : `0x${MASTER_PRIVATE_KEY}`
     );
 
+    const targetChainId = chainId ? Number(chainId) : 5201420;
     const nonce = Math.floor(Math.random() * 1000000000);
     const expiry = Math.floor(Date.now() / 1000) + 3600; // 1 hour expiry
 
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
       domain: {
         name: 'QuestEthGame',
         version: '1',
-        chainId: ELECTRONEUM_NETWORK.id,
+        chainId: targetChainId,
         verifyingContract: CONTRACT_ADDRESSES.ELECTRONEUM.GAME_CORE as `0x${string}`,
       },
       types: {

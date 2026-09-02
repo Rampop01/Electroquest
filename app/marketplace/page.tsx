@@ -13,10 +13,6 @@ export default function MarketplacePage() {
 
   return (
     <div className="bg-background min-h-screen relative overflow-hidden pb-20">
-      <ComingSoonOverlay 
-        title="The Grand Bazaar is Currently Sealed" 
-        description="Soon, you will be able to trade your hard-earned Chapter NFTs, legendary weapons, and rare artifacts with other questers via our Marketplace smart contract. Gather your ETN and prepare for the gates to open!" 
-      />
       {/* Animated background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(103,232,249,0.1),transparent_50%)] animate-glow-pulse" />
       <div className="absolute inset-0 bg-[url('/dark-stone-dungeon-room-medieval.jpg')] bg-cover bg-center opacity-10" />

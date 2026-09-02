@@ -12,7 +12,7 @@ interface ClaimProgressParams {
 }
 
 export function useQuestCompletion() {
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
   const { writeContract, data: hash, isPending, error } = useWriteContract();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState('');
@@ -41,6 +41,7 @@ export function useQuestCompletion() {
           quizScore: params.quizScore,
           timeTaken: params.timeTaken,
           xp: params.xp,
+          chainId: chain?.id || 5201420,
         }),
       });
 
