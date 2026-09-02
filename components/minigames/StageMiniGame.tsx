@@ -110,9 +110,6 @@ export function StageMiniGame({ questId, questType = "electroneum" }: StageMiniG
               <span className="text-xs uppercase font-bold tracking-widest text-glow-amber">
                 Stage #{questId} {questId === 10 ? 'Boss Arena' : 'Quest Game'}
               </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                <Coins className="w-3 h-3 text-amber-400" /> Reward: 2 ETN (Game) + 3 ETN (Quiz)
-              </span>
             </div>
             <h1 className="text-2xl font-black text-white font-[family-name:var(--font-cinzel-decorative)]">
               {instruction.title}
@@ -134,10 +131,10 @@ export function StageMiniGame({ questId, questType = "electroneum" }: StageMiniG
             {!completed && (
               <button
                 onClick={() => setShowSkipModal(true)}
-                className="flex items-center gap-1.5 px-3 py-2 bg-purple-950/80 hover:bg-purple-900 border border-purple-400/50 hover:border-purple-400 text-purple-200 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-md"
+                className="flex items-center gap-1.5 px-3 py-2 bg-stone-900/90 hover:bg-stone-800 border border-cyan-500/40 hover:border-cyan-400 text-cyan-200 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-md"
                 title="Skip Mini-game with 1 ETN Fast-Pass"
               >
-                <FastForward className="w-4 h-4 text-purple-300" />
+                <FastForward className="w-4 h-4 text-cyan-400" />
                 <span>Fast-Pass (1 ETN)</span>
               </button>
             )}
@@ -249,8 +246,8 @@ export function StageMiniGame({ questId, questType = "electroneum" }: StageMiniG
       {/* Fast-Pass Skip Stage Modal */}
       {showSkipModal && (
         <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-stone-900 border-2 border-purple-500 rounded-2xl max-w-md w-full p-6 text-center text-white shadow-2xl relative">
-            <div className="w-14 h-14 mx-auto mb-3 bg-purple-500/20 border border-purple-400/40 rounded-full flex items-center justify-center text-purple-300">
+          <div className="bg-stone-900 border-2 border-cyan-500/70 rounded-2xl max-w-md w-full p-6 text-center text-white shadow-2xl relative">
+            <div className="w-14 h-14 mx-auto mb-3 bg-cyan-500/20 border border-cyan-400/40 rounded-full flex items-center justify-center text-cyan-300">
               <FastForward className="w-7 h-7" />
             </div>
 
@@ -262,10 +259,10 @@ export function StageMiniGame({ questId, questType = "electroneum" }: StageMiniG
               Prefer jumping straight to the knowledge quiz? You can skip this 3D mini-game with a fast-pass fee.
             </p>
 
-            <div className="p-3 bg-stone-950 rounded-xl border border-purple-500/30 mb-6 flex justify-between items-center text-sm font-mono">
+            <div className="p-3 bg-stone-950 rounded-xl border border-cyan-500/30 mb-6 flex justify-between items-center text-sm font-mono">
               <span className="text-white/60">Fast-Pass Fee:</span>
-              <span className="text-purple-300 font-bold flex items-center gap-1">
-                <Coins className="w-4 h-4 text-purple-400" /> 1 ETN
+              <span className="text-cyan-300 font-bold flex items-center gap-1">
+                <Coins className="w-4 h-4 text-amber-400" /> 1 ETN
               </span>
             </div>
 
@@ -279,7 +276,7 @@ export function StageMiniGame({ questId, questType = "electroneum" }: StageMiniG
               <button
                 onClick={handleConfirmSkip}
                 disabled={isSkipping}
-                className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-bold rounded-xl text-sm shadow-lg hover:scale-105 transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-stone-950 font-black rounded-xl text-sm shadow-lg hover:scale-105 transition-all cursor-pointer flex items-center justify-center gap-2 uppercase tracking-wider"
               >
                 {isSkipping ? "Unlocking Quiz..." : "Confirm & Skip (1 ETN)"}
               </button>

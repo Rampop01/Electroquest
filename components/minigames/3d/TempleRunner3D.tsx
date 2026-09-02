@@ -50,157 +50,83 @@ class RunnerAudioEngine {
   // Subway Surfer style Coin / Energy Ball Ding
   public playBallPickup() {
     if (this.isMuted) return
-    const ctx = this.getContext()
-    if (!ctx) return
-    const now = ctx.currentTime
+    try {
+      const ctx = this.getContext()
+      if (!ctx) return
+      const now = ctx.currentTime
 
-    const osc1 = ctx.createOscillator()
-    const osc2 = ctx.createOscillator()
-    const gain = ctx.createGain()
+      const osc1 = ctx.createOscillator()
+      const osc2 = ctx.createOscillator()
+      const gain = ctx.createGain()
 
-    osc1.type = "sine"
-    osc2.type = "triangle"
+      osc1.type = "sine"
+      osc2.type = "triangle"
 
-    osc1.frequency.setValueAtTime(1320, now) // E6
-    osc1.frequency.exponentialRampToValueAtTime(1760, now + 0.12) // A6
+      osc1.frequency.setValueAtTime(1320, now) // E6
+      osc1.frequency.exponentialRampToValueAtTime(1760, now + 0.12) // A6
 
-    osc2.frequency.setValueAtTime(2640, now)
-    osc2.frequency.exponentialRampToValueAtTime(3520, now + 0.12)
+      osc2.frequency.setValueAtTime(2640, now)
+      osc2.frequency.exponentialRampToValueAtTime(3520, now + 0.12)
 
-    gain.gain.setValueAtTime(0, now)
-    gain.gain.linearRampToTimeConstant(0.18, now + 0.01)
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18)
+      gain.gain.setValueAtTime(0, now)
+      gain.gain.linearRampToValueAtTime(0.18, now + 0.01)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18)
 
-    osc1.connect(gain)
-    osc2.connect(gain)
-    gain.connect(ctx.destination)
+      osc1.connect(gain)
+      osc2.connect(gain)
+      gain.connect(ctx.destination)
 
-    osc1.start(now)
-    osc2.start(now)
-    osc1.stop(now + 0.2)
-    osc2.stop(now + 0.2)
+      osc1.start(now)
+      osc2.start(now)
+      osc1.stop(now + 0.2)
+      osc2.stop(now + 0.2)
+    } catch {
+      // Audio fallback safe
+    }
   }
 
   // Springy arcade jump sound
   public playJump() {
     if (this.isMuted) return
-    const ctx = this.getContext()
-    if (!ctx) return
-    const now = ctx.currentTime
+    try {
+      const ctx = this.getContext()
+      if (!ctx) return
+      const now = ctx.currentTime
 
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
 
-    osc.type = "sine"
-    osc.frequency.setValueAtTime(220, now)
-    osc.frequency.exponentialRampToValueAtTime(680, now + 0.22)
+      osc.type = "sine"
+      osc.frequency.setValueAtTime(220, now)
+      osc.frequency.exponentialRampToValueAtTime(680, now + 0.22)
 
-    gain.gain.setValueAtTime(0.2, now)
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25)
+      gain.gain.setValueAtTime(0.2, now)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25)
 
-    osc.connect(gain)
-    gain.connect(ctx.destination)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
 
-    osc.start(now)
-    osc.stop(now + 0.26)
+      osc.start(now)
+      osc.stop(now + 0.26)
+    } catch {}
   }
 
   // Quick whoosh on lane swipe
   public playLaneSwipe() {
     if (this.isMuted) return
-    const ctx = this.getContext()
-    if (!ctx) return
-    const now = ctx.currentTime
-
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-
-    osc.type = "sine"
-    osc.frequency.setValueAtTime(380, now)
-    osc.frequency.exponentialRampToValueAtTime(160, now + 0.12)
-
-    gain.gain.setValueAtTime(0.12, now)
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14)
-
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-
-    osc.start(now)
-    osc.stop(now + 0.15)
-  }
-
-  // Obstacle collision impact
-  public playHit() {
-    if (this.isMuted) return
-    const ctx = this.getContext()
-    if (!ctx) return
-    const now = ctx.currentTime
-
-    const osc = ctx.createOscillator()
-    const gain = ctx.createGain()
-
-    osc.type = "sawtooth"
-    osc.frequency.setValueAtTime(160, now)
-    osc.frequency.exponentialRampToValueAtTime(35, now + 0.35)
-
-    gain.gain.setValueAtTime(0.3, now)
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38)
-
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-
-    osc.start(now)
-    osc.stop(now + 0.4)
-  }
-
-  // Triumphant Victory Jingle
-  public playVictory() {
-    if (this.isMuted) return
-    const ctx = this.getContext()
-    if (!ctx) return
-    const now = ctx.currentTime
-
-    const notes = [523.25, 659.25, 783.99, 1046.5]
-    notes.forEach((freq, idx) => {
-      const osc = ctx.createOscillator()
-      const gain = ctx.createGain()
-      const noteTime = now + idx * 0.12
-
-      osc.type = "triangle"
-      osc.frequency.setValueAtTime(freq, noteTime)
-
-      gain.gain.setValueAtTime(0.2, noteTime)
-      gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.45)
-
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-
-      osc.start(noteTime)
-      osc.stop(noteTime + 0.5)
-    })
-  }
-
-  // Uptempo Subway-Surfers style funk beat & synth bassline
-  public startBgm() {
-    if (this.isMuted || this.bgmInterval) return
-    const ctx = this.getContext()
-    if (!ctx) return
-
-    const bassline = [110, 110, 146.83, 110, 130.81, 146.83, 164.81, 130.81]
-    this.bgmStep = 0
-
-    this.bgmInterval = setInterval(() => {
-      if (this.isMuted) return
+    try {
+      const ctx = this.getContext()
+      if (!ctx) return
       const now = ctx.currentTime
 
-      const freq = bassline[this.bgmStep % bassline.length]
       const osc = ctx.createOscillator()
       const gain = ctx.createGain()
 
-      osc.type = "triangle"
-      osc.frequency.setValueAtTime(freq, now)
+      osc.type = "sine"
+      osc.frequency.setValueAtTime(380, now)
+      osc.frequency.exponentialRampToValueAtTime(160, now + 0.12)
 
-      gain.gain.setValueAtTime(0.08, now)
+      gain.gain.setValueAtTime(0.12, now)
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14)
 
       osc.connect(gain)
@@ -208,24 +134,114 @@ class RunnerAudioEngine {
 
       osc.start(now)
       osc.stop(now + 0.15)
+    } catch {}
+  }
 
-      if (this.bgmStep % 2 === 1) {
-        const chime = ctx.createOscillator()
-        const chimeGain = ctx.createGain()
-        chime.type = "sine"
-        chime.frequency.setValueAtTime(freq * 4, now)
-        chimeGain.gain.setValueAtTime(0.03, now)
-        chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09)
+  // Obstacle collision impact
+  public playHit() {
+    if (this.isMuted) return
+    try {
+      const ctx = this.getContext()
+      if (!ctx) return
+      const now = ctx.currentTime
 
-        chime.connect(chimeGain)
-        chimeGain.connect(ctx.destination)
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
 
-        chime.start(now)
-        chime.stop(now + 0.1)
-      }
+      osc.type = "sawtooth"
+      osc.frequency.setValueAtTime(160, now)
+      osc.frequency.exponentialRampToValueAtTime(35, now + 0.35)
 
-      this.bgmStep++
-    }, 125)
+      gain.gain.setValueAtTime(0.3, now)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38)
+
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+
+      osc.start(now)
+      osc.stop(now + 0.4)
+    } catch {}
+  }
+
+  // Triumphant Victory Jingle
+  public playVictory() {
+    if (this.isMuted) return
+    try {
+      const ctx = this.getContext()
+      if (!ctx) return
+      const now = ctx.currentTime
+
+      const notes = [523.25, 659.25, 783.99, 1046.5]
+      notes.forEach((freq, idx) => {
+        const osc = ctx.createOscillator()
+        const gain = ctx.createGain()
+        const noteTime = now + idx * 0.12
+
+        osc.type = "triangle"
+        osc.frequency.setValueAtTime(freq, noteTime)
+
+        gain.gain.setValueAtTime(0.2, noteTime)
+        gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.45)
+
+        osc.connect(gain)
+        gain.connect(ctx.destination)
+
+        osc.start(noteTime)
+        osc.stop(noteTime + 0.5)
+      })
+    } catch {}
+  }
+
+  // Uptempo Subway-Surfers style funk beat & synth bassline
+  public startBgm() {
+    if (this.isMuted || this.bgmInterval) return
+    try {
+      const ctx = this.getContext()
+      if (!ctx) return
+
+      const bassline = [110, 110, 146.83, 110, 130.81, 146.83, 164.81, 130.81]
+      this.bgmStep = 0
+
+      this.bgmInterval = setInterval(() => {
+        if (this.isMuted) return
+        try {
+          const now = ctx.currentTime
+
+          const freq = bassline[this.bgmStep % bassline.length]
+          const osc = ctx.createOscillator()
+          const gain = ctx.createGain()
+
+          osc.type = "triangle"
+          osc.frequency.setValueAtTime(freq, now)
+
+          gain.gain.setValueAtTime(0.08, now)
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14)
+
+          osc.connect(gain)
+          gain.connect(ctx.destination)
+
+          osc.start(now)
+          osc.stop(now + 0.15)
+
+          if (this.bgmStep % 2 === 1) {
+            const chime = ctx.createOscillator()
+            const chimeGain = ctx.createGain()
+            chime.type = "sine"
+            chime.frequency.setValueAtTime(freq * 4, now)
+            chimeGain.gain.setValueAtTime(0.03, now)
+            chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09)
+
+            chime.connect(chimeGain)
+            chimeGain.connect(ctx.destination)
+
+            chime.start(now)
+            chime.stop(now + 0.1)
+          }
+
+          this.bgmStep++
+        } catch {}
+      }, 125)
+    } catch {}
   }
 
   public stopBgm() {
@@ -673,17 +689,25 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         scene.add(obs)
         obstacles.push(obs)
       } else {
-        const ballGeo = new THREE.SphereGeometry(0.42, 24, 24)
+        // Glowing ETN Energy Ball with golden halo ring
+        const ballGeo = new THREE.SphereGeometry(0.48, 24, 24)
         const ballMat = new THREE.MeshStandardMaterial({
-          color: 0xfbbf24,
-          emissive: 0xd97706,
-          metalness: 0.9,
+          color: 0xfacc15,
+          emissive: 0xf59e0b,
+          emissiveIntensity: 0.9,
+          metalness: 0.2,
           roughness: 0.1,
         })
         const ball = new THREE.Mesh(ballGeo, ballMat)
-        ball.position.set(lane, 1.2, z)
+        ball.position.set(lane, 1.0, z)
 
-        const innerLight = new THREE.PointLight(0xf59e0b, 0.8, 3)
+        const ringGeo = new THREE.TorusGeometry(0.65, 0.04, 8, 24)
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0xfef08a })
+        const ring = new THREE.Mesh(ringGeo, ringMat)
+        ring.rotation.x = Math.PI / 3
+        ball.add(ring)
+
+        const innerLight = new THREE.PointLight(0xfbbf24, 1.2, 4)
         innerLight.position.set(0, 0, 0)
         ball.add(innerLight)
 
@@ -763,11 +787,10 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         }
       })
 
-      // 4. Athletic Sprinter Limbs Animation (NO Catwalk, High Knee Flexion & Pumping Arms!)
+      // 4. Athletic Sprinter Limbs Animation
       const { limbs } = state
       if (limbs.leftArm && limbs.rightArm && limbs.leftLeg && limbs.rightLeg && limbs.leftKnee && limbs.rightKnee && limbs.body && limbs.cape) {
         if (state.isJumping) {
-          // Jump pose: both knees tucked, arms raised forward
           limbs.leftLeg.rotation.x = -0.6
           limbs.leftKnee.rotation.x = 1.1
           limbs.rightLeg.rotation.x = -0.4
@@ -781,24 +804,19 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
           const sin = Math.sin(state.runCycle)
           const cos = Math.cos(state.runCycle)
 
-          // Sprinter Pumping Arms (elbows forward and backward, no side flailing)
           limbs.leftArm.rotation.x = -sin * 1.2
           limbs.rightArm.rotation.x = sin * 1.2
 
-          // Sprinter Thighs (High forward knee drive and backward ground push)
           limbs.leftLeg.rotation.x = sin * 1.15
           limbs.rightLeg.rotation.x = -sin * 1.15
 
-          // Articulated Knees (Heel kicks up backward when thigh swings forward/back)
           limbs.leftKnee.rotation.x = Math.max(0, -sin * 1.4 + 0.2)
           limbs.rightKnee.rotation.x = Math.max(0, sin * 1.4 + 0.2)
 
-          // Sprinter vertical step bounce (NO lateral hip sway)
           limbs.body.position.y = Math.abs(cos) * 0.16
-          limbs.body.rotation.z = 0 // Locked straight, zero catwalk!
-          limbs.body.rotation.x = 0.28 // Athletic forward sprint lean
+          limbs.body.rotation.z = 0
+          limbs.body.rotation.x = 0.28
 
-          // Fluttering Cape
           limbs.cape.rotation.x = 0.45 + Math.sin(state.runCycle * 3.5) * 0.22
         }
       }
@@ -818,19 +836,21 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         }
       }
 
-      // Move energy balls toward player
+      // Move energy balls toward player & detect precise collection
       state.coins.forEach((ball) => {
         ball.position.z += state.speed
-        ball.rotation.y += 0.05
+        ball.rotation.y += 0.06
         ball.rotation.x += 0.03
 
         const pPos = state.player!.position
-        // Generous, guaranteed pickup hitbox (Z: 1.8 units, X: 1.4 units, Y: within jump range)
-        const inZRange = Math.abs(ball.position.z - pPos.z) < 1.8
-        const inXRange = Math.abs(ball.position.x - pPos.x) < 1.4
-        const inYRange = pPos.y < 2.8 // Easily collected whether running or jumping
+        const dx = Math.abs(ball.position.x - pPos.x)
+        const relZ = ball.position.z - pPos.z
+        const dy = Math.abs(ball.position.y - (pPos.y + 1.0))
 
-        if (inZRange && inXRange && inYRange) {
+        // Trigger pickup EXACTLY when the hero's body runs through the middle of the ball
+        const isTouchingBody = relZ >= 0.25 && relZ <= 0.75 && dx < 0.55 && dy < 1.3
+
+        if (isTouchingBody) {
           audioRef.current?.playBallPickup()
           ball.position.z = -450 - Math.random() * 50
           ball.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
@@ -847,37 +867,40 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
               onComplete()
             }, 1600)
           }
-        } else if (ball.position.z > 12) {
+        } else if (ball.position.z > 15) {
           ball.position.z = -450 - Math.random() * 50
           ball.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
         }
       })
 
-      // Move obstacles toward player
+      // Move obstacles toward player & detect exact physical collision
       state.obstacles.forEach((obs) => {
         obs.position.z += state.speed
 
         const pPos = state.player!.position
-        const inZ = Math.abs(obs.position.z - pPos.z) < 1.2
-        const inX = Math.abs(obs.position.x - pPos.x) < 0.95
+        const dx = Math.abs(obs.position.x - pPos.x)
+        const relZ = obs.position.z - pPos.z
 
-        // Low obstacle vs Tall obstacle collision
-        const isLowObstacle = obs.position.y <= 0.6
-        // If low obstacle and jumping high enough, successfully leaped over!
-        const hitHazard = isLowObstacle ? pPos.y < 0.8 : true
+        // Only collide when obstacle has physically reached the character body (0 to +0.45)
+        const isPhysicallyColliding = relZ >= -0.05 && relZ <= 0.45 && dx < 0.55
 
-        if (inZ && inX && hitHazard) {
-          audioRef.current?.playHit()
-          obs.position.z = -450 - Math.random() * 50
-          state.health -= 1
-          setHealth(state.health)
+        if (isPhysicallyColliding) {
+          const isLowObstacle = obs.position.y <= 0.6
+          const hitHazard = isLowObstacle ? pPos.y < 0.75 : true
 
-          if (state.health <= 0) {
-            state.active = false
-            audioRef.current?.stopBgm()
-            setGameOver(true)
+          if (hitHazard) {
+            audioRef.current?.playHit()
+            obs.position.z = -450 - Math.random() * 50
+            state.health -= 1
+            setHealth(state.health)
+
+            if (state.health <= 0) {
+              state.active = false
+              audioRef.current?.stopBgm()
+              setGameOver(true)
+            }
           }
-        } else if (obs.position.z > 12) {
+        } else if (obs.position.z > 15) {
           obs.position.z = -450 - Math.random() * 50
           obs.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
         }
@@ -1011,7 +1034,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
           <div className="flex items-center gap-2 bg-stone-900/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-amber-500/40 font-mono font-bold text-glow-amber text-xs md:text-sm">
             <Zap className="w-4 h-4 text-amber-400 fill-amber-400 animate-pulse" />
-            <span>{score} / {targetScore} Balls (2 ETN)</span>
+            <span>{score} / {targetScore} Energy Balls</span>
           </div>
         </div>
       </div>
@@ -1087,7 +1110,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
             Corridor Run Interrupted
           </h3>
           <p className="text-white/70 text-sm max-w-xs mb-6">
-            You collected <strong className="text-amber-300">{score} / {targetScore}</strong> Energy Balls. Gather all 20 to earn 2 ETN and unlock the Quiz!
+            You collected <strong className="text-amber-300">{score} / {targetScore}</strong> Energy Balls. Gather all 20 to power the portal and unlock the Quiz!
           </p>
           <button
             onClick={() => initGame()}
@@ -1106,9 +1129,9 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
             20 Energy Balls Collected!
           </h3>
           <p className="text-emerald-300 text-sm font-semibold mb-4">
-            Stage 1 Mini-game Cleared (+2 ETN Earned) • Temple Portal Active
+            Stage 1 Mini-game Cleared • Temple Portal Active
           </p>
-          <span className="text-xs text-white/70 animate-pulse">Proceeding to Knowledge Quiz (+3 ETN)...</span>
+          <span className="text-xs text-white/70 animate-pulse">Proceeding to Knowledge Quiz...</span>
         </div>
       )}
     </div>
