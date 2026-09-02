@@ -2,12 +2,243 @@
 
 import React, { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
-import { Trophy, Zap, Heart, ArrowLeft, ArrowRight, ArrowUp, RefreshCw, Pause, Play } from "lucide-react"
+import { Trophy, Zap, Heart, ArrowLeft, ArrowRight, ArrowUp, RefreshCw, Pause, Play, Volume2, VolumeX } from "lucide-react"
 
 interface TempleRunner3DProps {
   questId: string
   onComplete: () => void
   isPaused?: boolean
+}
+
+// Dedicated Subway-Surfer style Web Audio Arcade Sound Engine
+class RunnerAudioEngine {
+  private ctx: AudioContext | null = null
+  private bgmInterval: any = null
+  private isMuted: boolean = false
+  private bgmStep = 0
+
+  constructor() {
+    // Lazy initialized on first user gesture
+  }
+
+  private getContext(): AudioContext | null {
+    if (!this.ctx && typeof window !== "undefined") {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext
+      if (AudioContextClass) {
+        this.ctx = new AudioContextClass()
+      }
+    }
+    if (this.ctx && this.ctx.state === "suspended") {
+      this.ctx.resume().catch(() => {})
+    }
+    return this.ctx
+  }
+
+  public toggleMute(): boolean {
+    this.isMuted = !this.isMuted
+    if (this.isMuted) {
+      this.stopBgm()
+    } else {
+      this.startBgm()
+    }
+    return this.isMuted
+  }
+
+  // Subway Surfer style Coin / Energy Ball Ding
+  public playBallPickup() {
+    if (this.isMuted) return
+    const ctx = this.getContext()
+    if (!ctx) return
+    const now = ctx.currentTime
+
+    // 2-tone melodic high sparkle
+    const osc1 = ctx.createOscillator()
+    const osc2 = ctx.createOscillator()
+    const gain = ctx.createGain()
+
+    osc1.type = "sine"
+    osc2.type = "triangle"
+
+    osc1.frequency.setValueAtTime(1320, now) // E6
+    osc1.frequency.exponentialRampToValueAtTime(1760, now + 0.12) // A6
+
+    osc2.frequency.setValueAtTime(2640, now)
+    osc2.frequency.exponentialRampToValueAtTime(3520, now + 0.12)
+
+    gain.gain.setValueAtTime(0, now)
+    gain.gain.linearRampToTimeConstant(0.18, now + 0.01)
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18)
+
+    osc1.connect(gain)
+    osc2.connect(gain)
+    gain.connect(ctx.destination)
+
+    osc1.start(now)
+    osc2.start(now)
+    osc1.stop(now + 0.2)
+    osc2.stop(now + 0.2)
+  }
+
+  // Springy arcade jump sound
+  public playJump() {
+    if (this.isMuted) return
+    const ctx = this.getContext()
+    if (!ctx) return
+    const now = ctx.currentTime
+
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+
+    osc.type = "sine"
+    osc.frequency.setValueAtTime(220, now)
+    osc.frequency.exponentialRampToValueAtTime(680, now + 0.22)
+
+    gain.gain.setValueAtTime(0.2, now)
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25)
+
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+
+    osc.start(now)
+    osc.stop(now + 0.26)
+  }
+
+  // Quick whoosh on lane swipe
+  public playLaneSwipe() {
+    if (this.isMuted) return
+    const ctx = this.getContext()
+    if (!ctx) return
+    const now = ctx.currentTime
+
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+
+    osc.type = "sine"
+    osc.frequency.setValueAtTime(380, now)
+    osc.frequency.exponentialRampToValueAtTime(160, now + 0.12)
+
+    gain.gain.setValueAtTime(0.12, now)
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14)
+
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+
+    osc.start(now)
+    osc.stop(now + 0.15)
+  }
+
+  // Obstacle collision impact
+  public playHit() {
+    if (this.isMuted) return
+    const ctx = this.getContext()
+    if (!ctx) return
+    const now = ctx.currentTime
+
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+
+    osc.type = "sawtooth"
+    osc.frequency.setValueAtTime(160, now)
+    osc.frequency.exponentialRampToValueAtTime(35, now + 0.35)
+
+    gain.gain.setValueAtTime(0.3, now)
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38)
+
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+
+    osc.start(now)
+    osc.stop(now + 0.4)
+  }
+
+  // Triumphant Victory Jingle
+  public playVictory() {
+    if (this.isMuted) return
+    const ctx = this.getContext()
+    if (!ctx) return
+    const now = ctx.currentTime
+
+    const notes = [523.25, 659.25, 783.99, 1046.5] // C5, E5, G5, C6
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      const noteTime = now + idx * 0.12
+
+      osc.type = "triangle"
+      osc.frequency.setValueAtTime(freq, noteTime)
+
+      gain.gain.setValueAtTime(0.2, noteTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.45)
+
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+
+      osc.start(noteTime)
+      osc.stop(noteTime + 0.5)
+    })
+  }
+
+  // Uptempo Subway-Surfers style funk beat & synth bassline
+  public startBgm() {
+    if (this.isMuted || this.bgmInterval) return
+    const ctx = this.getContext()
+    if (!ctx) return
+
+    // 135 BPM = ~111ms per sixteenth note
+    const bassline = [110, 110, 146.83, 110, 130.81, 146.83, 164.81, 130.81] // A2, D3, C3, E3
+    this.bgmStep = 0
+
+    this.bgmInterval = setInterval(() => {
+      if (this.isMuted) return
+      const now = ctx.currentTime
+
+      // 1. Synth Bass note
+      const freq = bassline[this.bgmStep % bassline.length]
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+
+      osc.type = "triangle"
+      osc.frequency.setValueAtTime(freq, now)
+
+      gain.gain.setValueAtTime(0.08, now)
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14)
+
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+
+      osc.start(now)
+      osc.stop(now + 0.15)
+
+      // 2. Marimba high chime on upbeat
+      if (this.bgmStep % 2 === 1) {
+        const chime = ctx.createOscillator()
+        const chimeGain = ctx.createGain()
+        chime.type = "sine"
+        chime.frequency.setValueAtTime(freq * 4, now)
+        chimeGain.gain.setValueAtTime(0.03, now)
+        chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09)
+
+        chime.connect(chimeGain)
+        chimeGain.connect(ctx.destination)
+
+        chime.start(now)
+        chime.stop(now + 0.1)
+      }
+
+      this.bgmStep++
+    }, 125)
+  }
+
+  public stopBgm() {
+    if (this.bgmInterval) {
+      clearInterval(this.bgmInterval)
+      this.bgmInterval = null
+    }
+  }
+
+  public cleanup() {
+    this.stopBgm()
+  }
 }
 
 export function TempleRunner3D({ questId, onComplete, isPaused = false }: TempleRunner3DProps) {
@@ -17,13 +248,24 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
   const [gameOver, setGameOver] = useState(false)
   const [victory, setVictory] = useState(false)
   const [userPaused, setUserPaused] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
   const targetScore = 20 // Collect 20 Energy Balls to win 2 ETN
+
+  const audioRef = useRef<RunnerAudioEngine | null>(null)
+  if (!audioRef.current && typeof window !== "undefined") {
+    audioRef.current = new RunnerAudioEngine()
+  }
 
   const effectivePaused = isPaused || userPaused
   const isPausedRef = useRef(effectivePaused)
   useEffect(() => {
     isPausedRef.current = effectivePaused
-  }, [effectivePaused])
+    if (effectivePaused) {
+      audioRef.current?.stopBgm()
+    } else if (!gameOver && !victory) {
+      audioRef.current?.startBgm()
+    }
+  }, [effectivePaused, gameOver, victory])
 
   const gameStateRef = useRef({
     scene: null as THREE.Scene | null,
@@ -47,7 +289,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     isJumping: false,
     jumpVelocity: 0,
     runCycle: 0,
-    speed: 0.32,
+    speed: 0.44, // Enhanced fast subway runner speed!
     score: 0,
     health: 3,
     active: true,
@@ -84,19 +326,16 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     chest.castShadow = true
     bodyContainer.add(chest)
 
-    // Gold Chestplate Emblem
     const crestGeo = new THREE.BoxGeometry(0.4, 0.4, 0.08)
     const crest = new THREE.Mesh(crestGeo, goldMat)
     crest.position.set(0, 1.38, 0.23)
     bodyContainer.add(crest)
 
-    // Glowing Core in Center of Chest
     const coreGeo = new THREE.SphereGeometry(0.12, 16, 16)
     const core = new THREE.Mesh(coreGeo, energyCyanMat)
     core.position.set(0, 1.38, 0.28)
     bodyContainer.add(core)
 
-    // Abdomen / Belt
     const waistGeo = new THREE.BoxGeometry(0.58, 0.3, 0.4)
     const waist = new THREE.Mesh(waistGeo, goldMat)
     waist.position.y = 0.92
@@ -110,7 +349,6 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     const face = new THREE.Mesh(faceGeo, skinMat)
     headGroup.add(face)
 
-    // Helmet Crest & Crown
     const helmetGeo = new THREE.BoxGeometry(0.52, 0.35, 0.52)
     const helmet = new THREE.Mesh(helmetGeo, armorMat)
     helmet.position.set(0, 0.12, -0.02)
@@ -121,7 +359,6 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     helmetFin.position.set(0, 0.32, -0.05)
     headGroup.add(helmetFin)
 
-    // Glowing Cyan Visor
     const visorGeo = new THREE.BoxGeometry(0.38, 0.1, 0.12)
     const visor = new THREE.Mesh(visorGeo, energyCyanMat)
     visor.position.set(0, 0.04, 0.2)
@@ -130,12 +367,10 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     bodyContainer.add(headGroup)
 
     // 3. Shoulders & Arms
-    // Left Arm
     const leftArmPivot = new THREE.Group()
     leftArmPivot.position.set(-0.48, 1.6, 0)
 
     const shoulderPadL = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), goldMat)
-    shoulderPadL.position.set(0, 0, 0)
     leftArmPivot.add(shoulderPadL)
 
     const armUpperL = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.4, 8), armorMat)
@@ -153,12 +388,10 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
     bodyContainer.add(leftArmPivot)
 
-    // Right Arm
     const rightArmPivot = new THREE.Group()
     rightArmPivot.position.set(0.48, 1.6, 0)
 
     const shoulderPadR = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), goldMat)
-    shoulderPadR.position.set(0, 0, 0)
     rightArmPivot.add(shoulderPadR)
 
     const armUpperR = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.09, 0.4, 8), armorMat)
@@ -177,7 +410,6 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     bodyContainer.add(rightArmPivot)
 
     // 4. Hips & Legs
-    // Left Leg
     const leftLegPivot = new THREE.Group()
     leftLegPivot.position.set(-0.2, 0.8, 0)
 
@@ -195,7 +427,6 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
     bodyContainer.add(leftLegPivot)
 
-    // Right Leg
     const rightLegPivot = new THREE.Group()
     rightLegPivot.position.set(0.2, 0.8, 0)
 
@@ -336,7 +567,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     // Speed Lines / Dust Particles rushing past the runner
     const speedParticles: THREE.Mesh[] = []
     const partMat = new THREE.MeshBasicMaterial({ color: 0x22d3ee })
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 70; i++) {
       const part = new THREE.Mesh(new THREE.SphereGeometry(0.06, 6, 6), partMat)
       part.position.set(
         (Math.random() - 0.5) * 10,
@@ -439,7 +670,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       isJumping: false,
       jumpVelocity: 0,
       runCycle: 0,
-      speed: 0.32,
+      speed: 0.44, // Fast subway surf speed!
       score: 0,
       health: 3,
       active: true,
@@ -450,6 +681,10 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
     setGameOver(false)
     setVictory(false)
     setUserPaused(false)
+
+    if (!effectivePaused) {
+      audioRef.current?.startBgm()
+    }
 
     // Animation Loop
     let animId: number
@@ -465,9 +700,9 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       }
 
       // Progress Running Cycle
-      state.runCycle += state.speed * 0.75
+      state.runCycle += state.speed * 0.85
 
-      // 1. DYNAMIC HALLWAY SCROLLING: Move Pillars towards camera for true forward motion!
+      // 1. DYNAMIC HALLWAY SCROLLING
       state.pillars.forEach((pGroup) => {
         pGroup.position.z += state.speed
         if (pGroup.position.z > 20) {
@@ -475,7 +710,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         }
       })
 
-      // 2. DYNAMIC FLOOR SCROLLING: Move floor segments towards camera
+      // 2. DYNAMIC FLOOR SCROLLING
       state.floorSegments.forEach((fGroup: any) => {
         fGroup.position.z += state.speed
         if (fGroup.position.z > 20) {
@@ -483,9 +718,9 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
         }
       })
 
-      // 3. SPEED PARTICLES: Rush past player
+      // 3. SPEED PARTICLES
       state.speedParticles.forEach((part) => {
-        part.position.z += state.speed * 2.2
+        part.position.z += state.speed * 2.4
         if (part.position.z > 10) {
           part.position.z = -300 - Math.random() * 50
           part.position.x = (Math.random() - 0.5) * 10
@@ -500,31 +735,31 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
           state.limbs.leftArm.rotation.x = 0.6
           state.limbs.rightArm.rotation.x = 0.6
           state.limbs.body.position.y = 0
-          state.limbs.cape.rotation.x = 0.5
+          state.limbs.cape.rotation.x = 0.55
         } else {
           const swing = Math.sin(state.runCycle)
-          state.limbs.leftArm.rotation.x = swing * 0.95
-          state.limbs.rightArm.rotation.x = -swing * 0.95
-          state.limbs.leftLeg.rotation.x = -swing * 1.1
-          state.limbs.rightLeg.rotation.x = swing * 1.1
+          state.limbs.leftArm.rotation.x = swing * 1.05
+          state.limbs.rightArm.rotation.x = -swing * 1.05
+          state.limbs.leftLeg.rotation.x = -swing * 1.2
+          state.limbs.rightLeg.rotation.x = swing * 1.2
 
-          // Vertical bounce & torso bobbing
-          state.limbs.body.position.y = Math.abs(Math.sin(state.runCycle * 2)) * 0.12
-          state.limbs.body.rotation.z = Math.sin(state.runCycle) * 0.04
+          // Dynamic vertical bounce & torso bobbing
+          state.limbs.body.position.y = Math.abs(Math.sin(state.runCycle * 2)) * 0.14
+          state.limbs.body.rotation.z = Math.sin(state.runCycle) * 0.05
           // Cape flutter
-          state.limbs.cape.rotation.x = 0.35 + Math.sin(state.runCycle * 3) * 0.15
+          state.limbs.cape.rotation.x = 0.4 + Math.sin(state.runCycle * 3.5) * 0.2
         }
       }
 
-      // Smooth lane movement
+      // Snappy lane movement (0.26 factor)
       const targetX = state.playerLane * 2.2
-      state.player.position.x += (targetX - state.player.position.x) * 0.2
+      state.player.position.x += (targetX - state.player.position.x) * 0.26
       playerLight.position.x = state.player.position.x
 
       // Jump Physics
       if (state.isJumping) {
         state.player.position.y += state.jumpVelocity
-        state.jumpVelocity -= 0.022
+        state.jumpVelocity -= 0.024
         if (state.player.position.y <= 0) {
           state.player.position.y = 0
           state.isJumping = false
@@ -534,16 +769,17 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
       // Move energy balls toward player
       state.coins.forEach((ball) => {
         ball.position.z += state.speed
-        ball.rotation.y += 0.04
-        ball.rotation.x += 0.02
+        ball.rotation.y += 0.05
+        ball.rotation.x += 0.03
 
         // Energy Ball Collision check
         const pPos = state.player!.position
         if (
-          Math.abs(ball.position.z - pPos.z) < 1.1 &&
-          Math.abs(ball.position.x - pPos.x) < 1.0 &&
+          Math.abs(ball.position.z - pPos.z) < 1.15 &&
+          Math.abs(ball.position.x - pPos.x) < 1.05 &&
           pPos.y < 1.6
         ) {
+          audioRef.current?.playBallPickup()
           ball.position.z = -450 - Math.random() * 50
           ball.position.x = lanePositions[Math.floor(Math.random() * lanePositions.length)]
           state.score += 1
@@ -551,8 +787,10 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
           if (state.score >= targetScore) {
             state.active = false
+            audioRef.current?.stopBgm()
+            audioRef.current?.playVictory()
             setVictory(true)
-            setTimeout(() => onComplete(), 1500)
+            setTimeout(() => onComplete(), 1600)
           }
         } else if (ball.position.z > 10) {
           ball.position.z = -450 - Math.random() * 50
@@ -566,16 +804,18 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
         const pPos = state.player!.position
         if (
-          Math.abs(obs.position.z - pPos.z) < 1.0 &&
-          Math.abs(obs.position.x - pPos.x) < 0.9 &&
+          Math.abs(obs.position.z - pPos.z) < 1.05 &&
+          Math.abs(obs.position.x - pPos.x) < 0.95 &&
           pPos.y < 1.1
         ) {
+          audioRef.current?.playHit()
           obs.position.z = -450 - Math.random() * 50
           state.health -= 1
           setHealth(state.health)
 
           if (state.health <= 0) {
             state.active = false
+            audioRef.current?.stopBgm()
             setGameOver(true)
           }
         } else if (obs.position.z > 10) {
@@ -591,6 +831,7 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
     return () => {
       cancelAnimationFrame(animId)
+      audioRef.current?.cleanup()
     }
   }
 
@@ -609,12 +850,21 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
       if (!gameStateRef.current.active || isPausedRef.current) return
       if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
-        gameStateRef.current.playerLane = Math.max(-1, gameStateRef.current.playerLane - 1)
+        const nextLane = Math.max(-1, gameStateRef.current.playerLane - 1)
+        if (nextLane !== gameStateRef.current.playerLane) {
+          audioRef.current?.playLaneSwipe()
+          gameStateRef.current.playerLane = nextLane
+        }
       } else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
-        gameStateRef.current.playerLane = Math.min(1, gameStateRef.current.playerLane + 1)
+        const nextLane = Math.min(1, gameStateRef.current.playerLane + 1)
+        if (nextLane !== gameStateRef.current.playerLane) {
+          audioRef.current?.playLaneSwipe()
+          gameStateRef.current.playerLane = nextLane
+        }
       } else if ((e.key === "ArrowUp" || e.key === " " || e.key === "w" || e.key === "W") && !gameStateRef.current.isJumping) {
+        audioRef.current?.playJump()
         gameStateRef.current.isJumping = true
-        gameStateRef.current.jumpVelocity = 0.45
+        gameStateRef.current.jumpVelocity = 0.48
       }
     }
     window.addEventListener("keydown", handleKeyDown)
@@ -624,22 +874,38 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
   // Mobile Touch actions
   const moveLeft = () => {
     if (!gameStateRef.current.active || isPausedRef.current) return
-    gameStateRef.current.playerLane = Math.max(-1, gameStateRef.current.playerLane - 1)
+    const nextLane = Math.max(-1, gameStateRef.current.playerLane - 1)
+    if (nextLane !== gameStateRef.current.playerLane) {
+      audioRef.current?.playLaneSwipe()
+      gameStateRef.current.playerLane = nextLane
+    }
   }
 
   const moveRight = () => {
     if (!gameStateRef.current.active || isPausedRef.current) return
-    gameStateRef.current.playerLane = Math.min(1, gameStateRef.current.playerLane + 1)
+    const nextLane = Math.min(1, gameStateRef.current.playerLane + 1)
+    if (nextLane !== gameStateRef.current.playerLane) {
+      audioRef.current?.playLaneSwipe()
+      gameStateRef.current.playerLane = nextLane
+    }
   }
 
   const jump = () => {
     if (!gameStateRef.current.active || gameStateRef.current.isJumping || isPausedRef.current) return
+    audioRef.current?.playJump()
     gameStateRef.current.isJumping = true
-    gameStateRef.current.jumpVelocity = 0.45
+    gameStateRef.current.jumpVelocity = 0.48
   }
 
   const togglePause = () => {
     setUserPaused((prev) => !prev)
+  }
+
+  const toggleSound = () => {
+    if (audioRef.current) {
+      const muted = audioRef.current.toggleMute()
+      setIsMuted(muted)
+    }
   }
 
   return (
@@ -649,14 +915,24 @@ export function TempleRunner3D({ questId, onComplete, isPaused = false }: Temple
 
       {/* Top Game HUD */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10 pointer-events-none">
-        {/* Health */}
-        <div className="flex items-center gap-1 bg-stone-900/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-red-500/30 pointer-events-auto">
-          {[...Array(3)].map((_, i) => (
-            <Heart
-              key={i}
-              className={`w-5 h-5 ${i < health ? "text-red-500 fill-red-500" : "text-stone-600"}`}
-            />
-          ))}
+        {/* Health & Audio toggle */}
+        <div className="flex items-center gap-2 pointer-events-auto">
+          <div className="flex items-center gap-1 bg-stone-900/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-red-500/30">
+            {[...Array(3)].map((_, i) => (
+              <Heart
+                key={i}
+                className={`w-5 h-5 ${i < health ? "text-red-500 fill-red-500" : "text-stone-600"}`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={toggleSound}
+            title={isMuted ? "Unmute Runner Audio" : "Mute Runner Audio"}
+            className="p-1.5 bg-stone-900/80 hover:bg-stone-800 border border-white/20 rounded-full text-stone-300 hover:text-amber-400 transition-colors shadow-md cursor-pointer"
+          >
+            {isMuted ? <VolumeX className="w-4 h-4 text-stone-500" /> : <Volume2 className="w-4 h-4 text-amber-400 animate-pulse" />}
+          </button>
         </div>
 
         {/* Action Controls & Energy Balls Goal */}
