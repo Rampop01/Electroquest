@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { WalletConnectButton } from './WalletConnectButton';
 import { SoundToggle } from './sound-toggle';
+import { DailyStreakModal } from './daily-streak-modal';
+import { useDailyStreak } from '@/hooks/useDailyStreak';
 import { cn } from '@/lib/utils';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Flame } from 'lucide-react';
 import { useState } from 'react';
 
 const navigation = [
@@ -18,6 +20,8 @@ const navigation = [
 export function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [streakModalOpen, setStreakModalOpen] = useState(false);
+  const { currentStreak, canClaim } = useDailyStreak();
   
   const isActive = (href: string) => {
     if (href === '/') return pathname === '/';
@@ -25,65 +29,84 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-amber-900/30 bg-stone-950/90 backdrop-blur-md shadow-2xl">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
-        
-        {/* Logo & Brand */}
-        <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl overflow-hidden border border-amber-500/40 bg-stone-900/80 shadow-glow-primary group-hover:scale-105 transition-transform duration-300 shrink-0 flex items-center justify-center p-0.5">
-              <img 
-                src="/logo.png" 
-                alt="Electroquest Logo" 
-                className="w-full h-full object-contain drop-shadow"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-[family-name:var(--font-cinzel-decorative)] font-black text-base md:text-lg tracking-wider text-glow-amber group-hover:text-glow-cyan transition-colors">
-                ELECTROQUEST
-              </span>
-              <span className="text-[9px] font-[family-name:var(--font-cinzel)] text-cyan-400/80 tracking-widest uppercase -mt-1 hidden sm:block">
-                Aurelius Smart Chain
-              </span>
-            </div>
-          </Link>
+    <>
+      <header className="sticky top-0 z-50 w-full border-b border-amber-900/30 bg-stone-950/90 backdrop-blur-md shadow-2xl">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
+          
+          {/* Logo & Brand */}
+          <div className="flex items-center gap-6">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-amber-500/40 bg-stone-900/80 shadow-glow-primary group-hover:scale-105 transition-transform duration-300 shrink-0 flex items-center justify-center p-0.5">
+                <img 
+                  src="/logo.png" 
+                  alt="Electroquest Logo" 
+                  className="w-full h-full object-contain drop-shadow"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-[family-name:var(--font-cinzel-decorative)] font-black text-base md:text-lg tracking-wider text-glow-amber group-hover:text-glow-cyan transition-colors">
+                  ELECTROQUEST
+                </span>
+                <span className="text-[9px] font-[family-name:var(--font-cinzel)] text-cyan-400/80 tracking-widest uppercase -mt-1 hidden sm:block">
+                  Aurelius Smart Chain
+                </span>
+              </div>
+            </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 text-sm font-medium">
-            {navigation.map((item) => {
-              const active = isActive(item.href);
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'relative px-3.5 py-1.5 rounded-md transition-colors duration-200 font-[family-name:var(--font-cinzel)] tracking-wider text-xs md:text-sm font-semibold',
-                    active ? 'text-glow-amber bg-amber-950/30 border border-amber-500/30' : 'text-stone-300 hover:text-glow-amber hover:bg-stone-900/50'
-                  )}
-                >
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-        
-        {/* Right Action Tools: Sound & Wallet */}
-        <div className="flex items-center gap-2.5">
-          <SoundToggle />
-          <div className="h-5 w-px bg-white/15 hidden sm:block" />
-          <WalletConnectButton />
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-1 text-sm font-medium">
+              {navigation.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                      'relative px-3.5 py-1.5 rounded-md transition-colors duration-200 font-[family-name:var(--font-cinzel)] tracking-wider text-xs md:text-sm font-semibold',
+                      active ? 'text-glow-amber bg-amber-950/30 border border-amber-500/30' : 'text-stone-300 hover:text-glow-amber hover:bg-stone-900/50'
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+          
+          {/* Right Action Tools: Streak, Sound & Wallet */}
+          <div className="flex items-center gap-2 md:gap-3">
+            {/* Daily Streak Flame Button */}
+            <button
+              onClick={() => setStreakModalOpen(true)}
+              title={canClaim ? "Claim today's daily streak energy!" : `${currentStreak} Day Streak Active`}
+              className={cn(
+                "relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-300 font-mono text-xs font-bold cursor-pointer",
+                canClaim 
+                  ? "bg-amber-500/20 border-amber-400/80 text-amber-300 shadow-glow-secondary animate-pulse"
+                  : "bg-stone-900/80 border-amber-500/30 text-amber-400 hover:border-amber-400"
+              )}
+            >
+              <Flame className={cn("w-4 h-4", canClaim ? "text-amber-400 fill-amber-400 animate-bounce" : "text-amber-400 fill-amber-400/60")} />
+              <span>{currentStreak > 0 ? `${currentStreak}d` : 'Streak'}</span>
+              {canClaim && (
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping absolute -top-0.5 -right-0.5" />
+              )}
+            </button>
 
-          {/* Mobile Menu Toggle Button */}
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1.5 text-stone-300 hover:text-amber-400 rounded-lg hover:bg-stone-800 transition-colors"
-            aria-label="Toggle Navigation Menu"
-          >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+            <SoundToggle />
+            <div className="h-5 w-px bg-white/15 hidden sm:block" />
+            <WalletConnectButton />
+
+            {/* Mobile Menu Toggle Button */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-1.5 text-stone-300 hover:text-amber-400 rounded-lg hover:bg-stone-800 transition-colors"
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
-      </div>
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
@@ -111,5 +134,12 @@ export function Header() {
         </div>
       )}
     </header>
+
+    {/* Daily Streak Modal */}
+    <DailyStreakModal 
+      isOpen={streakModalOpen} 
+      onClose={() => setStreakModalOpen(false)} 
+    />
+  </>
   );
 }

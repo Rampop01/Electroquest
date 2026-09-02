@@ -9,6 +9,7 @@ import { Flame, AlertCircle, CheckCircle, Loader2, Clock } from "lucide-react"
 import { useSound } from "./audio-player"
 import { useAccount } from "wagmi"
 import { useQuestCompletion } from "@/hooks/useQuest"
+import { useDailyStreak } from "@/hooks/useDailyStreak"
 import { WalletConnectButton } from "./WalletConnectButton"
 import { CompletionBadge } from "./completion-badge"
 import { VictoryConfetti } from "./victory-confetti"
@@ -40,6 +41,7 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
   
   const { isConnected } = useAccount()
   const { claimProgress, isSubmitting, isConfirming, isConfirmed, message, error } = useQuestCompletion()
+  const { claimDailyStreak } = useDailyStreak()
 
   useEffect(() => {
     let interval: NodeJS.Timeout
@@ -87,6 +89,9 @@ export function QuizRoom({ questions, questId, questType }: QuizRoomProps) {
     setShowResults(true)
     const finalScore = calculateScore()
     const finalPercentage = Math.round((finalScore / questions.length) * 100)
+    if (finalPercentage >= 70) {
+      claimDailyStreak()
+    }
     setTimeout(() => {
       playSound(finalPercentage >= 70 ? "success" : "fail")
     }, 300)
