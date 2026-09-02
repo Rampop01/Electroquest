@@ -25,48 +25,61 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-amber-900/20 bg-stone-900/95 backdrop-blur">
-      <div className="container flex h-16 items-center justify-between px-4">
+    <header className="sticky top-0 z-50 w-full border-b border-amber-900/30 bg-stone-950/90 backdrop-blur-md shadow-2xl">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         
-        {/* Mobile Menu Button */}
-        <div className="flex items-center md:hidden">
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="text-amber-100/70 hover:text-amber-400 focus:outline-none"
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
+        {/* Logo & Brand */}
+        <div className="flex items-center gap-6">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 via-amber-600 to-cyan-500 p-0.5 shadow-glow-primary group-hover:scale-105 transition-transform duration-300">
+              <div className="w-full h-full bg-stone-950 rounded-[7px] flex items-center justify-center">
+                <span className="text-amber-400 font-bold text-sm">⚡</span>
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-[family-name:var(--font-cinzel-decorative)] font-black text-base md:text-lg tracking-wider text-glow-amber group-hover:text-glow-cyan transition-colors">
+                ELECTROQUEST
+              </span>
+              <span className="text-[9px] font-[family-name:var(--font-cinzel)] text-cyan-400/80 tracking-widest uppercase -mt-1 hidden sm:block">
+                Aurelius Smart Chain
+              </span>
+            </div>
+          </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center">
-          <nav className="flex items-center space-x-1 text-sm font-medium">
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-1 text-sm font-medium">
             {navigation.map((item) => {
               const active = isActive(item.href);
               return (
-                <div key={item.name} className="relative group">
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      'relative px-4 py-2 rounded-md transition-colors duration-200 font-[family-name:var(--font-cinzel)] tracking-wider',
-                      active ? 'text-glow-amber' : 'text-stone-300 hover:text-glow-amber'
-                    )}
-                  >
-                    <span className="relative z-10">{item.name}</span>
-                    <span className={cn(
-                      'absolute bottom-0 left-1/2 w-0 h-0.5 bg-glow-amber transition-all duration-200 -translate-x-1/2',
-                      active && 'w-4/5 shadow-glow-secondary'
-                    )}></span>
-                  </Link>
-                </div>
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    'relative px-3.5 py-1.5 rounded-md transition-colors duration-200 font-[family-name:var(--font-cinzel)] tracking-wider text-xs md:text-sm font-semibold',
+                    active ? 'text-glow-amber bg-amber-950/30 border border-amber-500/30' : 'text-stone-300 hover:text-glow-amber hover:bg-stone-900/50'
+                  )}
+                >
+                  {item.name}
+                </Link>
               );
             })}
           </nav>
         </div>
         
-        <div className="flex items-center gap-2">
+        {/* Right Action Tools: Sound & Wallet */}
+        <div className="flex items-center gap-2.5">
           <SoundToggle />
+          <div className="h-5 w-px bg-white/15 hidden sm:block" />
           <WalletConnectButton />
+
+          {/* Mobile Menu Toggle Button */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-1.5 text-stone-300 hover:text-amber-400 rounded-lg hover:bg-stone-800 transition-colors"
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </div>
 

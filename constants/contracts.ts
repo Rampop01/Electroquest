@@ -10,7 +10,7 @@ export const CONTRACT_ADDRESSES = {
   }
 } as const;
 
-// Electroneum Network Configuration
+// Electroneum Network Configurations
 export const ELECTRONEUM_NETWORK = {
   id: 52014,
   name: 'Electroneum',
@@ -28,6 +28,26 @@ export const ELECTRONEUM_NETWORK = {
     default: { name: 'Electroneum Explorer', url: 'https://blockexplorer.electroneum.com' },
   },
 } as const;
+
+export const ELECTRONEUM_TESTNET = {
+  id: 5201420,
+  name: 'Electroneum Testnet',
+  network: 'electroneum-testnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Electroneum',
+    symbol: 'ETN',
+  },
+  rpcUrls: {
+    public: { http: ['https://rpc.ankr.com/electroneum_testnet'] },
+    default: { http: ['https://rpc.ankr.com/electroneum_testnet'] },
+  },
+  blockExplorers: {
+    default: { name: 'Electroneum Testnet Explorer', url: 'https://testnet-blockexplorer.electroneum.com' },
+  },
+} as const;
+
+export const SUPPORTED_CHAIN_IDS = [ELECTRONEUM_NETWORK.id, ELECTRONEUM_TESTNET.id] as const;
 
 // Quest Types Enum (matches smart contract)
 export enum QuestType {

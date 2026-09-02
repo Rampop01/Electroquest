@@ -1,7 +1,7 @@
 import { http, createConfig } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 import { coinbaseWallet, walletConnect, metaMask, injected } from 'wagmi/connectors'
-import { CONTRACT_ADDRESSES, ELECTRONEUM_NETWORK } from '@/constants/contracts'
+import { CONTRACT_ADDRESSES, ELECTRONEUM_NETWORK, ELECTRONEUM_TESTNET } from '@/constants/contracts'
 
 // WalletConnect project ID - you should get this from WalletConnect Cloud
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || ''
@@ -52,11 +52,12 @@ const getConnectors = () => {
 }
 
 export const config = createConfig({
-  chains: [ELECTRONEUM_NETWORK, mainnet], // Use our custom Electroneum chain definition
+  chains: [ELECTRONEUM_TESTNET, ELECTRONEUM_NETWORK, mainnet],
   connectors: getConnectors(),
   transports: {
+    [ELECTRONEUM_TESTNET.id]: http(ELECTRONEUM_TESTNET.rpcUrls.default.http[0]),
     [ELECTRONEUM_NETWORK.id]: http(ELECTRONEUM_NETWORK.rpcUrls.default.http[0]),
-    [mainnet.id]: http(), // Add mainnet transport for compatibility
+    [mainnet.id]: http(),
   },
   ssr: true,
 })

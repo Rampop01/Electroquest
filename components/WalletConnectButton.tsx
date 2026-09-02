@@ -1,11 +1,9 @@
 
-/* A11Y NOTE: Ensure proper ARIA roles and tabIndex are maintained for screen readers */
-'use client';
-
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi';
 import { GameButton } from './game-button';
 import { useState, useEffect } from 'react';
-import { ELECTRONEUM_NETWORK } from '@/constants/contracts';
+import { ELECTRONEUM_NETWORK, ELECTRONEUM_TESTNET, SUPPORTED_CHAIN_IDS } from '@/constants/contracts';
+import { LogOut, AlertTriangle, CheckCircle2, ChevronDown } from 'lucide-react';
 
 export function WalletConnectButton() {
   const { address, isConnected, chain } = useAccount();
@@ -17,17 +15,12 @@ export function WalletConnectButton() {
 
   useEffect(() => {
     setMounted(true);
-    
-    // Debug: Log available connectors
-    if (connectors.length > 0) {
-      
-    }
   }, [connectors]);
 
-  // Custom gaming button style for the wallet connector
-  const gamingBtnClass = "relative overflow-hidden group px-4 py-2 text-xs md:text-sm font-[family-name:var(--font-cinzel)] font-bold text-glow-amber uppercase tracking-wider bg-stone-900/80 border border-glow-amber/50 hover:border-glow-amber hover:bg-stone-800 transition-all duration-300 [clip-path:polygon(10px_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%,0_10px)]";
-  const gamingBtnClassCyan = "relative overflow-hidden group px-4 py-2 text-xs md:text-sm font-[family-name:var(--font-cinzel)] font-bold text-glow-cyan uppercase tracking-wider bg-stone-900/80 border border-glow-cyan/50 hover:border-glow-cyan hover:bg-stone-800 transition-all duration-300 [clip-path:polygon(10px_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%,0_10px)]";
-  const gamingBtnClassRed = "relative overflow-hidden group px-4 py-2 text-xs md:text-sm font-[family-name:var(--font-cinzel)] font-bold text-red-400 uppercase tracking-wider bg-stone-900/80 border border-red-500/50 hover:border-red-500 hover:bg-stone-800 transition-all duration-300 [clip-path:polygon(10px_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%,0_10px)]";
+  // Custom gaming button styles
+  const gamingBtnClass = "relative overflow-hidden group px-3.5 py-1.5 text-xs md:text-sm font-[family-name:var(--font-cinzel)] font-bold text-glow-amber uppercase tracking-wider bg-stone-900/90 border border-glow-amber/50 hover:border-glow-amber hover:bg-stone-800 transition-all duration-300 [clip-path:polygon(8px_0,100%_0,100%_calc(100%-8px),calc(100%-8px)_100%,0_100%,0_8px)]";
+  const gamingBtnClassCyan = "relative overflow-hidden group px-3.5 py-1.5 text-xs md:text-sm font-[family-name:var(--font-cinzel)] font-bold text-cyan-300 uppercase tracking-wider bg-cyan-950/70 border border-cyan-500/60 hover:border-cyan-400 hover:bg-cyan-900 transition-all duration-300 [clip-path:polygon(8px_0,100%_0,100%_calc(100%-8px),calc(100%-8px)_100%,0_100%,0_8px)]";
+  const gamingBtnClassRed = "relative overflow-hidden group px-3 py-1.5 text-xs font-[family-name:var(--font-cinzel)] font-bold text-red-300 uppercase tracking-wider bg-red-950/60 border border-red-500/50 hover:border-red-400 hover:bg-red-900/80 transition-all duration-300 [clip-path:polygon(8px_0,100%_0,100%_calc(100%-8px),calc(100%-8px)_100%,0_100%,0_8px)]";
 
   // Don't render during SSR
   if (!mounted) {
@@ -38,31 +31,53 @@ export function WalletConnectButton() {
     );
   }
 
-  if (isConnected && !(chain?.id !== ELECTRONEUM_NETWORK.id)) {
+  const isSupportedNetwork = chain?.id ? (SUPPORTED_CHAIN_IDS as readonly number[]).includes(chain.id) : false;
+  const networkName = chain?.id === ELECTRONEUM_TESTNET.id ? 'ETN Testnet' : 'Electroneum';
+
+  if (isConnected && isSupportedNetwork) {
     return (
-      <div className="flex items-center gap-3 bg-stone-900/50 p-1 pr-1 border border-glow-amber/20 backdrop-blur-sm [clip-path:polygon(10px_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%,0_10px)]">
-        <span className="text-xs md:text-sm font-bold text-glow-cyan font-[family-name:var(--font-cinzel)] tracking-wider pl-3">
+      <div className="flex items-center gap-2 bg-stone-950/80 p-1 pl-3 pr-1 border border-glow-amber/30 rounded-lg backdrop-blur-md shadow-lg">
+        <div className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider hidden sm:inline">
+            {networkName}
+          </span>
+        </div>
+        <div className="h-4 w-px bg-white/15 hidden sm:block" />
+        <span className="text-xs md:text-sm font-bold text-glow-amber font-mono tracking-wider">
           {`${address?.slice(0, 6)}...${address?.slice(-4)}`}
         </span>
-        <button className={gamingBtnClass} onClick={() => disconnect()}>
-          Disconnect
+        <button
+          onClick={() => disconnect()}
+          title="Disconnect Wallet"
+          className="p-1.5 text-stone-400 hover:text-red-400 hover:bg-stone-800/80 rounded transition-colors"
+        >
+          <LogOut className="w-3.5 h-3.5" />
         </button>
       </div>
     );
   }
 
-  if (isConnected && (chain?.id !== ELECTRONEUM_NETWORK.id)) {
+  if (isConnected && !isSupportedNetwork) {
     return (
-      <div className="flex items-center gap-2 bg-stone-900/50 p-1 border border-red-500/30 backdrop-blur-sm [clip-path:polygon(10px_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%,0_10px)]">
-        <span className="text-xs md:text-sm text-red-400 font-[family-name:var(--font-cinzel)] font-bold animate-pulse pl-2">Wrong Realm</span>
+      <div className="flex items-center gap-2 bg-red-950/70 p-1 pl-2.5 pr-1 border border-red-500/40 rounded-lg backdrop-blur-md">
+        <div className="flex items-center gap-1 text-red-400 text-xs font-semibold">
+          <AlertTriangle className="w-3.5 h-3.5 animate-pulse shrink-0" />
+          <span className="hidden md:inline font-[family-name:var(--font-cinzel)]">Wrong Network</span>
+        </div>
         <button 
-          onClick={() => switchChain({ chainId: ELECTRONEUM_NETWORK.id })}
+          onClick={() => switchChain({ chainId: ELECTRONEUM_TESTNET.id })}
           className={gamingBtnClassCyan}
+          title="Switch to Electroneum Network"
         >
-          Enter Electroneum
+          Switch to Electroneum
         </button>
-        <button onClick={() => disconnect()} className={gamingBtnClassRed}>
-          Flee
+        <button 
+          onClick={() => disconnect()} 
+          className={gamingBtnClassRed}
+          title="Disconnect Wallet"
+        >
+          Disconnect
         </button>
       </div>
     );
