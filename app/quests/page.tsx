@@ -80,7 +80,7 @@ export default function QuestsPage() {
       <div className="relative z-10 container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="font-[family-name:var(--font-cinzel-decorative)] text-4xl md:text-6xl font-bold text-glow-amber mb-4 text-glow-md">
+          <h1 className="font-[family-name:var(--font-cinzel-decorative)] text-4xl md:text-6xl font-bold text-glow-amber mb-4 text-glow-sm tracking-wide">
             Quest Map
           </h1>
           <p className="font-[family-name:var(--font-cinzel)] text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
